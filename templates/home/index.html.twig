@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil
+{% endblock %}
+
+{% block body %}
+	<div class="flex">
+
+		<div class="card w-1/2">
+			<div class="card-title">
+				<h3>Recherche de la fiche</h3>
+			</div>
+			<div class="card-body">
+				<form action="{{ path('app_home') }}" method="get">
+					<div class="form-group mb-3">
+						<div class="text-center">
+							<label for="recherche" class="text-sm">Recherche</label>
+							<input type="text" name="recherche" id="recherche" class="form-control w-10/12" value="{{ recherche }}">
+						</div>
+						<button type="submit" class="w-full btn-sm btn-primary mt-2">Charger les informations</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="card w-1/2">
+			<div class="card-title">
+				<h3>Informations sur la parcelle</h3>
+			</div>
+			<div class="card-body text-center" data-controller="info">
+                <span id="info"></span>
+            </div>
+		</div>
+	</div>
+
+    <div class="card">
+        <div class="card-title">
+            <h3>Localisation de la parcelle</h3>
+        </div>
+        <div class="card-body flex" data-controller="map">
+            <div id="map" class="min-h-96 w-1/2 border-r"></div>
+            <div class="w-1/2">
+                <p class="text-center">Adresse postale la plus proche : <span id="adresse" class="italic">chargement en cours...</span></p>
+            </div>
+        </div>
+    </div>
+
+	<div class="card">
+		<div class="card-title">
+			<h3>Urbanisme</h3>
+		</div>
+		<div class="card-body flex">
+			<div id="mapUrba" class="min-h-96 w-1/2 border-r"></div>
+			<div class="w-1/2">
+
+			</div>
+		</div>
+	</div>
+
+	<div class="card">
+		<div class="card-title">
+			<h3>RPG</h3>
+		</div>
+		<div class="card-body flex">
+			<div id="mapRPG" class="min-h-96 w-1/2 border-r"></div>
+			<div class="w-1/2">
+
+			</div>
+		</div>
+	</div>
+
+	<div class="card">
+		<div class="card-title">
+			<h3>Parcelle IGN</h3>
+		</div>
+	</div>
+
+	<div class="card">
+		<div class="card-title">
+			<h3>Capacité Réseau</h3>
+		</div>
+	</div>
+
+	<div class="card">
+		<div class="card-title">
+			<h3>Ensoleillement</h3>
+		</div>
+	</div>
+
+	<div class="card">
+		<div class="card-title">
+			<h3>Enjeux Environnementaux</h3>
+		</div>
+	</div>
+
+	<div class="card">
+		<div class="card-title">
+			<h3>PPRI</h3>
+		</div>
+	</div>
+
+	<div class="card">
+		<div class="card-title">
+			<h3>Autres</h3>
+		</div>
+	</div>
+
+
+{% endblock %}
