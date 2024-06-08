@@ -36,11 +36,11 @@
 			<h3>Localisation de la parcelle</h3>
 		</div>
 		<div class="card-body flex" data-controller="map">
-			<div id="map" class="h-[40rem] w-1/2 border-r"></div>
+			<div id="map" class="h-[40rem] w-1/2 border-r map"></div>
 			<div class="w-1/2">
 				<p class="text-center">Adresse postale la plus proche :
 					<span id="adresse" class="italic">chargement en
-																																																																																																																																																																																																											cours...</span>
+																																																																																																																																																																																																																																																					cours...</span>
 				</p>
 			</div>
 		</div>
@@ -50,7 +50,7 @@
 			<h3>Urbanisme</h3>
 		</div>
 		<div class="card-body flex">
-			<div id="mapUrba" class="h-[40rem] w-1/2 border-r"></div>
+			<div id="mapUrba" class="h-[40rem] w-1/2 border-r map"></div>
 			<div class="w-1/2">
 				<h2>TYP Urba</h2>
 				{{form_row(form.TYPUrba)}}
@@ -63,7 +63,7 @@
 			<h3>RPG</h3>
 		</div>
 		<div class="card-body flex">
-			<div id="mapRPG" class="h-[40rem] w-1/2 border-r"></div>
+			<div id="mapRPG" class="h-[40rem] w-1/2 border-r map"></div>
 			<div class="w-1/2">
 				<h2>RPG</h2>
 				{{form_row(form.RPG)}}
@@ -76,7 +76,7 @@
 			<h3>Parcelle IGN</h3>
 		</div>
 		<div class="card-body flex">
-			<div id="mapIGN" class="h-[40rem] w-1/2 border-r"></div>
+			<div id="mapIGN" class="h-[40rem] w-1/2 border-r map"></div>
 			<div class="w-1/2"></div>
 		</div>
 	</div>
@@ -87,7 +87,7 @@
 		</div>
 		<div class="card-body flex">
 			<div class="w-1/2 border-r space-y-5">
-				<div id="mapReseau" class="h-[40rem]"></div>
+				<div id="mapReseau" class="h-[40rem] map"></div>
 				<iframe class="h-[45rem] w-full overscroll-contain" src="https://capareseau.fr/"></iframe>
 				<iframe class="h-[45rem] w-full" src="https://data.enedis.fr/pages/cartographie-des-reseaux-contenu/"></iframe>
 			</div>
@@ -110,17 +110,26 @@
 		<div class="card-title">
 			<h3>Ensoleillement</h3>
 		</div>
+		<div class="w-1/2 border-r space-y-5">
+			<div class="map h-[40rem]" id="mapEnsolleillement"></div>
+		</div>
 	</div>
 
 	<div class="card">
 		<div class="card-title">
 			<h3>Enjeux Environnementaux</h3>
 		</div>
+		<div class="w-1/2 border-r space-y-5">
+			<div class="map h-[40rem]" id="mapEnvironnement"></div>
+		</div>
 	</div>
 
 	<div class="card">
 		<div class="card-title">
 			<h3>PPRI</h3>
+		</div>
+		<div class="w-1/2 border-r space-y-5">
+			<div class="map h-[40rem]" id="mapPPRI"></div>
 		</div>
 	</div>
 

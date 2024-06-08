@@ -8,7 +8,8 @@ export default class extends Controller {
   map = null;
   mapUrba = null;
   mapRPG = null;
-  allMaps = [];
+  allMaps = {};
+  maps = [];
   latitude = null;
   longitude = null;
   id = document.getElementById('recherche').value;
@@ -19,18 +20,25 @@ export default class extends Controller {
   codeParcelle4 = null;
 
   initialize() {
+    this.maps = document.querySelectorAll('.map')
 
-    const mapEl = document.getElementById('map')
-    this.map = this.mapFactory(mapEl, "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}")
-    const mapUrbaEl = document.getElementById('mapUrba')
-    this.mapUrba = this.mapFactory(mapUrbaEl, "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}")
-    const mapRPG = document.getElementById('mapRPG')
-    this.mapRPG = this.mapFactory(mapRPG, "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png")
+    for (let i = 0; i < this.maps.length; i++) {
+      const map = this.maps[i]
+      const mapEl = document.getElementById(map.id)
+      let layer;
+      switch (map.id) {
+        case 'mapRPG':
+          layer = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          break;
+        default:
+          layer = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          break;
+      }
+      this.allMaps[map.id] = this.mapFactory(mapEl, layer)
+    }
     const adresseParcelleEl = document.getElementById('adresse')
     new L.TileLayer("https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=LANDUSE.AGRICULTURE2021&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
-      { opacity: 0.8 }).addTo(this.mapRPG);
-
-
+      { opacity: 0.8 }).addTo(this.allMaps['mapRPG']);
     fetch(Routing.generate('app_airtable', { record: this.id })).then((response) => {
       response.json().then((data) => {
         this.latitude = data.fields.Latitude;
@@ -40,26 +48,30 @@ export default class extends Controller {
         this.codeParcelle2 = data.fields["TYP: Parcelles"].substring(0, 2);
         this.codeParcelle4 = data.fields["TYP: Parcelles"].substring(2, 6);
         this.allParcelles = data.fields["TYP: Parcelles"].replaceAll(' ', '').split(',');
-        this.centerMap(this.map)
-        this.addMaker(this.map)
-
-        this.centerMap(this.mapUrba)
-        this.fetchParcelle(this.map);
-        this.fetchParcelle(this.mapUrba);
+        this.addMarker(this.allMaps['map'])
         this.fetchZoneUrba(this.mapUrba);
-        this.centerMap(this.mapRPG);
-        this.fetchParcelle(this.mapRPG);
-
+        for (let i = 0; i < this.maps.length; i++) {
+          const map = this.maps[i]
+          this.centerMap(this.allMaps[map.id])
+          this.fetchParcelle(this.allMaps[map.id])
+        }
       })
     })
 
 
-
-    this.map.on('fullscreenchange', function () {
-      const mapDiv = document.getElementById('map')
-      mapDiv.requestFullscreen()
-    })
-
+    // this.allMaps.forEach((map) => {
+    //   map.on('fullscreenchange', function () {
+    //     const mapDiv = document.getElementById(map.id)
+    //     mapDiv.requestFullscreen()
+    //   })
+    // })
+    for (let i = 0; i < this.maps.length; i++) {
+      const map = this.maps[i]
+      const mapEl = document.getElementById(map.id)
+      mapEl.addEventListener('fullscreenchange', function () {
+        mapEl.requestFullscreen()
+      })
+    }
   }
 
   /**
@@ -81,7 +93,6 @@ export default class extends Controller {
 
     new L.TileLayer(tileLayer, { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(finishedMap);
     L.control.BigImage({ position: 'topright', printControlLabel: '⤵️' }).addTo(finishedMap);
-    this.allMaps.push(finishedMap)
     return finishedMap
   }
 
@@ -104,7 +115,8 @@ export default class extends Controller {
     map.panTo(new L.LatLng(this.latitude, this.longitude))
   }
 
-  addMaker(map) {
+  addMarker(map) {
+    if (!map) return
     L.marker([this.latitude, this.longitude]).addTo(map)
   }
 
