@@ -30,6 +30,9 @@ export default class extends Controller {
         case 'mapRPG':
           layer = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           break;
+        case 'mapIGN':
+          layer = ''
+          break;
         default:
           layer = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
           break;
@@ -39,6 +42,9 @@ export default class extends Controller {
     const adresseParcelleEl = document.getElementById('adresse')
     new L.TileLayer("https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=LANDUSE.AGRICULTURE2021&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
       { opacity: 0.8 }).addTo(this.allMaps['mapRPG']);
+
+    new L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { opacity: 0.85 }).addTo(this.allMaps['mapIGN'])
+    new L.tileLayer('https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=CADASTRALPARCELS.PARCELLAIRE_EXPRESS&style=PCI%20vecteur&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix={z}&TileCol={x}&TileRow={y}').addTo(this.allMaps['mapIGN'])
     fetch(Routing.generate('app_airtable', { record: this.id })).then((response) => {
       response.json().then((data) => {
         this.latitude = data.fields.Latitude;
@@ -49,7 +55,7 @@ export default class extends Controller {
         this.codeParcelle4 = data.fields["TYP: Parcelles"].substring(2, 6);
         this.allParcelles = data.fields["TYP: Parcelles"].replaceAll(' ', '').split(',');
         this.addMarker(this.allMaps['map'])
-        this.fetchZoneUrba(this.mapUrba);
+        this.fetchZoneUrba(this.allMaps['mapUrba']);
         for (let i = 0; i < this.maps.length; i++) {
           const map = this.maps[i]
           this.centerMap(this.allMaps[map.id])
@@ -173,7 +179,7 @@ export default class extends Controller {
           color: "#FF5555"
         }).addTo(map);
       } catch (e) {
-        console.error(data);
+        console.error(e, data);
         console.error("Erreur zone Urba")
         return
       }
