@@ -18,7 +18,7 @@ export default class extends Controller {
   codeParcelle2 = null;
   codeParcelle4 = null;
 
-  connect() {
+  initialize() {
 
     const mapEl = document.getElementById('map')
     this.map = this.mapFactory(mapEl, "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}")
@@ -28,17 +28,17 @@ export default class extends Controller {
     this.mapRPG = this.mapFactory(mapRPG, "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png")
     const adresseParcelleEl = document.getElementById('adresse')
     new L.TileLayer("https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=LANDUSE.AGRICULTURE2021&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
-      {opacity: 0.8}).addTo(this.mapRPG);
+      { opacity: 0.8 }).addTo(this.mapRPG);
 
 
-    fetch(Routing.generate('app_airtable', {record: this.id})).then((response) => {
+    fetch(Routing.generate('app_airtable', { record: this.id })).then((response) => {
       response.json().then((data) => {
         this.latitude = data.fields.Latitude;
         this.longitude = data.fields.Longitude;
         this.findAdresse(this.latitude, this.longitude, adresseParcelleEl)
         //this.codeInsee = data.fields.Code_Insee;
-        this.codeParcelle2 = data.fields["TYP: Parcelles"].substring(0,2);
-        this.codeParcelle4 = data.fields["TYP: Parcelles"].substring(2,6);
+        this.codeParcelle2 = data.fields["TYP: Parcelles"].substring(0, 2);
+        this.codeParcelle4 = data.fields["TYP: Parcelles"].substring(2, 6);
         this.allParcelles = data.fields["TYP: Parcelles"].replaceAll(' ', '').split(',');
         this.centerMap(this.map)
         this.addMaker(this.map)
@@ -68,7 +68,7 @@ export default class extends Controller {
    * @param tileLayer URL of the tileLayer
    * @returns {*} The finished map
    */
-  mapFactory(map, tileLayer){
+  mapFactory(map, tileLayer) {
     const finishedMap = new L.Map(map, {
       center: [46, 3],
       zoom: 12,
@@ -80,7 +80,7 @@ export default class extends Controller {
     });
 
     new L.TileLayer(tileLayer, { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(finishedMap);
-    L.control.BigImage({position: 'topright', printControlLabel: '⤵️'}).addTo(finishedMap);
+    L.control.BigImage({ position: 'topright', printControlLabel: '⤵️' }).addTo(finishedMap);
     this.allMaps.push(finishedMap)
     return finishedMap
   }
@@ -91,7 +91,7 @@ export default class extends Controller {
    * @param longitude
    * @param element
    */
-  findAdresse(latitude, longitude, element){
+  findAdresse(latitude, longitude, element) {
     fetch('https://api-adresse.data.gouv.fr/reverse/?lon=' + longitude + '&lat=' + latitude).then((response) => {
       response.json().then((data) => {
         element.className = "font-bold"
@@ -100,28 +100,28 @@ export default class extends Controller {
     })
   }
 
-  centerMap(map){
+  centerMap(map) {
     map.panTo(new L.LatLng(this.latitude, this.longitude))
   }
 
-  addMaker(map){
+  addMaker(map) {
     L.marker([this.latitude, this.longitude]).addTo(map)
   }
 
-  async getCodeInsee(){
+  async getCodeInsee() {
     const response = await fetch('https://geo.api.gouv.fr/communes/?lat=' + this.latitude + '&lon=' + this.longitude)
     const data = await response.json()
     this.codeInsee = data[0].code
     return this.codeInsee
   }
 
-  fetchParcelle(map){
+  fetchParcelle(map) {
     fetch('https://geo.api.gouv.fr/communes/?lat=' + this.latitude + '&lon=' +
       this.longitude).then((response) => {
         response.json().then((data) => {
           this.codeInsee = data[0].code
           this.allParcelles.forEach((parcelle) => {
-            fetch('https://apicarto.ign.fr/api/cadastre/parcelle?code_insee=' + this.codeInsee + '&section=' + parcelle.substring(0,2) + '&numero=' + parcelle.substring(2,6)).then((response) => {
+            fetch('https://apicarto.ign.fr/api/cadastre/parcelle?code_insee=' + this.codeInsee + '&section=' + parcelle.substring(0, 2) + '&numero=' + parcelle.substring(2, 6), { cache: "force-cache" }).then((response) => {
               response.json().then((data) => {
                 L.geoJSON(data, {
                   onEachFeature: function (feature, layer) {
@@ -129,29 +129,30 @@ export default class extends Controller {
                     if (layer.getBounds().getNorthEast().lat - layer.getBounds().getSouthWest().lat < 0.001) {
                       return
                     }
-                  }}).addTo(map)
+                  }
+                }).addTo(map)
               })
             })
           })
         }
         )
-    })
+      })
   }
 
-  async fetchZoneUrba(map){
+  async fetchZoneUrba(map) {
 
     this.getRPG(await this.getCodeInsee()).then((data) => {
-      try{
+      try {
         L.geoJSON(data, {
-          onEachFeature: function(feature, layer) {
+          onEachFeature: function (feature, layer) {
             //Adding the card for onClick
             //layer.options.fillColor = '#883333'
             //layer.options.color = '#CC3333'
             layer.addEventListener('click', () => {
-              const marker = L.marker(layer.getBounds().getCenter(), {opacity: 0}).addTo(map)
+              const marker = L.marker(layer.getBounds().getCenter(), { opacity: 0 }).addTo(map)
               let content = ''
-              content+=(feature.properties.code_cultu.toString().replaceAll(',','<br />'))
-              marker.bindPopup('<p>'+content+'</p>').openPopup()
+              content += (feature.properties.code_cultu.toString().replaceAll(',', '<br />'))
+              marker.bindPopup('<p>' + content + '</p>').openPopup()
             })
 
           },
@@ -159,7 +160,7 @@ export default class extends Controller {
           fillOpacity: 0.3,
           color: "#FF5555"
         }).addTo(map);
-      }catch(e){
+      } catch (e) {
         console.error(data);
         console.error("Erreur zone Urba")
         return
@@ -172,26 +173,26 @@ export default class extends Controller {
     return [...text].map(a => parseInt(a, 36) - 10).filter(a => a >= 0);
   }
 
-  getColorCodeCultu(codeCultu){
+  getColorCodeCultu(codeCultu) {
     let colour = "#"
-    for(let i = 0; i < codeCultu.length; i++){
+    for (let i = 0; i < codeCultu.length; i++) {
       colour = colour.concat((this.alphabetPosition(codeCultu[i]) * 10 + 5).toString(16))
     }
     return colour
   }
 
-  async getRPG(codeInsee){
+  async getRPG(codeInsee) {
     const responseGeom = await fetch('https://apicarto.ign.fr/api/gpu/municipality?insee=' + codeInsee)
     const jsonGeom = await responseGeom.json()
     const dataGeom = await jsonGeom
     const geom = await dataGeom.features[0].geometry
-    try{
+    try {
       const response = await fetch('https://apicarto.ign.fr/api/rpg/v2?annee=2021&geom=' + JSON.stringify(geom))
       const json = await response.json()
       const data = await json
       return await data
-    }catch(e){
-      console.error("Impossible de charger les données RPG pour le code INSEE " + codeInsee )
+    } catch (e) {
+      console.error("Impossible de charger les données RPG pour le code INSEE " + codeInsee)
       return e
     }
 
