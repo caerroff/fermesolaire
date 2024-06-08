@@ -32,15 +32,19 @@ input {
 }
 
 .btn-primary {
-    @apply bg-blue-500 text-white p-2 rounded-lg hover:cursor-pointer hover:bg-blue-600;
+    @apply bg-blue-500 text-white m-2 p-2 rounded-2xl hover:cursor-pointer hover:bg-blue-600;
 }
 
 .btn-success {
-    @apply bg-green-600 text-white p-2 rounded-lg hover:cursor-pointer hover:bg-green-700;
+    @apply bg-green-600 text-white m-2 p-2 rounded-2xl hover:cursor-pointer hover:bg-green-700;
+}
+
+.btn-warning {
+    @apply bg-yellow-600 text-white m-2 p-2 rounded-2xl hover:cursor-pointer hover:bg-yellow-700;
 }
 
 .table {
-    @apply w-full border-collapse;
+    @apply w-full border-collapse m-4;
 }
 
 .table th,

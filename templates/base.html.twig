@@ -1,31 +1,36 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Ferme Solaire - {% block title %}{% endblock %}</title>
-        <link rel="icon" href="{{asset('assets/icon.ico')}}">
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-              integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-              crossorigin=""/>
-{#        add leaflet.BigImage css#}
-        <link rel="stylesheet" href="https://unpkg.com/leaflet.bigimage/dist/Leaflet.BigImage.min.css">
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+	<head>
+		<meta charset="UTF-8">
+		<title>Ferme Solaire -
+			{% block title %}{% endblock %}
+		</title>
+		<link rel="icon" href="{{asset('assets/icon.ico')}}">
+		<link
+		rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+		{#        add leaflet.BigImage css#}
+		<link rel="stylesheet" href="https://unpkg.com/leaflet.bigimage/dist/Leaflet.BigImage.min.css">
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        <nav class="min-h-[3rem] bg-blue-200 rounded-b-2xl">
-            <img src="{{ asset('assets/logofermesolaire.svg') }}" alt="Logo Ferme Solaire" class="absolute w-1/12 mt-3 ml-2 p-2 bg-white rounded-full">
-            <ul class="flex place-content-center">
-                <li class="btn-sm btn-primary my-2 align-middle"><a href="{{ path('app_home') }}">Accueil</a></li>
-            </ul>
-        </nav>
-        <div class="bg-gray-50 m-2 pt-2 rounded-xl min-h-screen">
-            {% block body %}{% endblock %}
-        </div>
-    </body>
-</html>
+		{% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+		{% endblock %}
+	</head>
+	<body>
+		<nav class="min-h-[3rem] bg-blue-200 rounded-b-2xl">
+			<img src="{{ asset('assets/logofermesolaire.svg') }}" alt="Logo Ferme Solaire" class="absolute w-1/12 mt-3 ml-2 p-2 bg-white rounded-full">
+			<ul class="flex place-content-center">
+				<li class="btn-sm btn-primary my-2 align-middle">
+					<a href="{{ path('app_home') }}">Accueil</a>
+				</li>
+				<li class="btn-sm btn-primary my-2 align-middle">
+					<a href="{{ path('app_relais_index') }}">Relais</a>
+				</li>
+			</ul>
+		</nav>
+		<div class="bg-gray-50 m-2 pt-2 rounded-xl min-h-screen"> {% block body %}{% endblock %}
+			</div>
+		</body>
+	</html>

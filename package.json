@@ -2,6 +2,7 @@
     "devDependencies": {
         "@babel/core": "^7.17.0",
         "@babel/preset-env": "^7.16.0",
+        "@fortawesome/fontawesome-free": "^6.5.2",
         "@symfony/webpack-encore": "^4.0.0",
         "autoprefixer": "^10.4.19",
         "core-js": "^3.23.0",
@@ -25,8 +26,11 @@
     "dependencies": {
         "@hotwired/stimulus": "^3.2.2",
         "@symfony/stimulus-bridge": "^3.2.2",
+        "datatables.net-dt": "^2.0.8",
         "fos-router": "file:vendor/friendsofsymfony/jsrouting-bundle/Resources",
+        "jquery": "^3.7.1",
         "leaflet": "^1.9.4",
-        "leaflet.bigimage": "^1.0.1"
+        "leaflet.bigimage": "^1.0.1",
+        "select2": "^4.1.0-rc.0"
     }
 }

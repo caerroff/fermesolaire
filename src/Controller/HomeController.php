@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\RecordAirtableType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,9 +14,10 @@ class HomeController extends AbstractController
     public function index(Request $request): Response
     {
         $recherche = $request->query->get('recherche') ? $request->query->get('recherche') : 'receI98tyqDwdJVyf';
-
+        $form = $this->createForm(RecordAirtableType::class)->createView();
         return $this->render('home/index.html.twig', [
-            'recherche' => $recherche
+            'recherche' => $recherche,
+            'form' => $form,
         ]);
     }
 }

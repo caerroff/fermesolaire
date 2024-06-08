@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Relais index
+{% endblock %}
+
+{% block body %}
+	<h1>Relais index</h1>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nom</th>
+				<th>Commune</th>
+				<th>Lat</th>
+				<th>Lon</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for relai in relais %}
+				<tr>
+					<td>{{ relai.id }}</td>
+					<td>{{ relai.nom }}</td>
+					<td>{{ relai.commune }}</td>
+					<td>{{ relai.lat }}</td>
+					<td>{{ relai.lon }}</td>
+					<td>
+						<a href="{{ path('app_relais_show', {'id': relai.id}) }}">show</a>
+						<a href="{{ path('app_relais_edit', {'id': relai.id}) }}">edit</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="6">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<a href="{{ path('app_relais_new') }}" class="btn-primary">Create new</a>
+{% endblock %}

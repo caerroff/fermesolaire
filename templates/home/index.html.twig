@@ -4,108 +4,131 @@
 {% endblock %}
 
 {% block body %}
-<div class="flex">
-
-	<div class="card w-1/2">
-		<div class="card-title">
-			<h3>Recherche de la fiche</h3>
-		</div>
-		<div class="card-body">
-			<form action="{{ path('app_home') }}" method="get">
-				<div class="form-group mb-3">
-					<div class="text-center">
-						<label for="recherche" class="text-sm">Recherche</label>
-						<input type="text" name="recherche" id="recherche" class="form-control w-10/12"
-							value="{{ recherche }}">
+	<div class="flex">
+		<div class="card w-1/2">
+			<div class="card-title">
+				<h3>Recherche de la fiche</h3>
+			</div>
+			<div class="card-body">
+				<form action="{{ path('app_home') }}" method="get">
+					<div class="form-group mb-3">
+						<div class="text-center">
+							<label for="recherche" class="text-sm">Recherche</label>
+							<input type="text" name="recherche" id="recherche" class="form-control w-10/12" value="{{ recherche }}">
+						</div>
+						<button type="submit" class="w-full btn-sm btn-primary mt-2">Charger les informations</button>
 					</div>
-					<button type="submit" class="w-full btn-sm btn-primary mt-2">Charger les informations</button>
-				</div>
-			</form>
+				</form>
+			</div>
+		</div>
+		<div class="card w-1/2">
+			<div class="card-title">
+				<h3>Informations sur la parcelle</h3>
+			</div>
+			<div class="card-body text-center" data-controller="info">
+				<span id="info"></span>
+			</div>
 		</div>
 	</div>
-
-	<div class="card w-1/2">
+	{{form_start(form)}}
+	<div class="card">
 		<div class="card-title">
-			<h3>Informations sur la parcelle</h3>
+			<h3>Localisation de la parcelle</h3>
 		</div>
-		<div class="card-body text-center" data-controller="info">
-			<span id="info"></span>
-		</div>
-	</div>
-</div>
-
-<div class="card">
-	<div class="card-title">
-		<h3>Localisation de la parcelle</h3>
-	</div>
-	<div class="card-body flex" data-controller="map">
-		<div id="map" class="h-[40rem] w-1/2 border-r"></div>
-		<div class="w-1/2">
-			<p class="text-center">Adresse postale la plus proche : <span id="adresse" class="italic">chargement en
-					cours...</span></p>
+		<div class="card-body flex" data-controller="map">
+			<div id="map" class="h-[40rem] w-1/2 border-r"></div>
+			<div class="w-1/2">
+				<p class="text-center">Adresse postale la plus proche :
+					<span id="adresse" class="italic">chargement en
+																																																																																																																																																																																																											cours...</span>
+				</p>
+			</div>
 		</div>
 	</div>
-</div>
-
-<div class="card">
-	<div class="card-title">
-		<h3>Urbanisme</h3>
-	</div>
-	<div class="card-body flex">
-		<div id="mapUrba" class="h-[40rem] w-1/2 border-r"></div>
-		<div class="w-1/2">
-
+	<div class="card">
+		<div class="card-title">
+			<h3>Urbanisme</h3>
+		</div>
+		<div class="card-body flex">
+			<div id="mapUrba" class="h-[40rem] w-1/2 border-r"></div>
+			<div class="w-1/2">
+				<h2>TYP Urba</h2>
+				{{form_row(form.TYPUrba)}}
+			</div>
 		</div>
 	</div>
-</div>
 
-<div class="card">
-	<div class="card-title">
-		<h3>RPG</h3>
-	</div>
-	<div class="card-body flex">
-		<div id="mapRPG" class="h-[40rem] w-1/2 border-r"></div>
-		<div class="w-1/2">
-
+	<div class="card">
+		<div class="card-title">
+			<h3>RPG</h3>
+		</div>
+		<div class="card-body flex">
+			<div id="mapRPG" class="h-[40rem] w-1/2 border-r"></div>
+			<div class="w-1/2">
+				<h2>RPG</h2>
+				{{form_row(form.RPG)}}
+			</div>
 		</div>
 	</div>
-</div>
 
-<div class="card">
-	<div class="card-title">
-		<h3>Parcelle IGN</h3>
+	<div class="card">
+		<div class="card-title">
+			<h3>Parcelle IGN</h3>
+		</div>
+		<div class="card-body flex">
+			<div id="mapIGN" class="h-[40rem] w-1/2 border-r"></div>
+			<div class="w-1/2"></div>
+		</div>
 	</div>
-</div>
 
-<div class="card">
-	<div class="card-title">
-		<h3>Capacité Réseau</h3>
+	<div class="card">
+		<div class="card-title">
+			<h3>Capacité Réseau</h3>
+		</div>
+		<div class="card-body flex">
+			<div class="w-1/2 border-r space-y-5">
+				<div id="mapReseau" class="h-[40rem]"></div>
+				<iframe class="h-[45rem] w-full overscroll-contain" src="https://capareseau.fr/"></iframe>
+				<iframe class="h-[45rem] w-full" src="https://data.enedis.fr/pages/cartographie-des-reseaux-contenu/"></iframe>
+			</div>
+			<div class="w-1/2">
+				<h2>TYP DIS RACC</h2>
+				{{form_row(form.TYPDisRacc)}}
+				<h2>TYP CAP RACC</h2>
+				{{form_row(form.TYPCapRacc)}}
+				<h2>TYP NOMRACC</h2>
+				{{form_row(form.TYPNomRacc)}}
+				<h2>TYP VILLERACC</h2>
+				{{form_row(form.TYPVilleRacc)}}
+				<h2>Relais</h2>
+				{{form_row(form.Relais)}}
+			</div>
+		</div>
 	</div>
-</div>
 
-<div class="card">
-	<div class="card-title">
-		<h3>Ensoleillement</h3>
+	<div class="card">
+		<div class="card-title">
+			<h3>Ensoleillement</h3>
+		</div>
 	</div>
-</div>
 
-<div class="card">
-	<div class="card-title">
-		<h3>Enjeux Environnementaux</h3>
+	<div class="card">
+		<div class="card-title">
+			<h3>Enjeux Environnementaux</h3>
+		</div>
 	</div>
-</div>
 
-<div class="card">
-	<div class="card-title">
-		<h3>PPRI</h3>
+	<div class="card">
+		<div class="card-title">
+			<h3>PPRI</h3>
+		</div>
 	</div>
-</div>
 
-<div class="card">
-	<div class="card-title">
-		<h3>Autres</h3>
+	<div class="card">
+		<div class="card-title">
+			<h3>Autres</h3>
+		</div>
 	</div>
-</div>
 
 
 {% endblock %}
