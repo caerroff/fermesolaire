@@ -8,7 +8,8 @@ export default class extends Controller {
   map = null;
   mapUrba = null;
   mapRPG = null;
-  allMaps = [];
+  allMaps = {};
+  maps = [];
   latitude = null;
   longitude = null;
   id = document.getElementById('recherche').value;
@@ -19,18 +20,31 @@ export default class extends Controller {
   codeParcelle4 = null;
 
   initialize() {
+    this.maps = document.querySelectorAll('.map')
 
-    const mapEl = document.getElementById('map')
-    this.map = this.mapFactory(mapEl, "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}")
-    const mapUrbaEl = document.getElementById('mapUrba')
-    this.mapUrba = this.mapFactory(mapUrbaEl, "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}")
-    const mapRPG = document.getElementById('mapRPG')
-    this.mapRPG = this.mapFactory(mapRPG, "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png")
+    for (let i = 0; i < this.maps.length; i++) {
+      const map = this.maps[i]
+      const mapEl = document.getElementById(map.id)
+      let layer;
+      switch (map.id) {
+        case 'mapRPG':
+          layer = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          break;
+        case 'mapIGN':
+          layer = ''
+          break;
+        default:
+          layer = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          break;
+      }
+      this.allMaps[map.id] = this.mapFactory(mapEl, layer)
+    }
     const adresseParcelleEl = document.getElementById('adresse')
     new L.TileLayer("https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=LANDUSE.AGRICULTURE2021&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
-      { opacity: 0.8 }).addTo(this.mapRPG);
+      { opacity: 0.8 }).addTo(this.allMaps['mapRPG']);
 
-
+    new L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { opacity: 0.85 }).addTo(this.allMaps['mapIGN'])
+    new L.tileLayer('https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=CADASTRALPARCELS.PARCELLAIRE_EXPRESS&style=PCI%20vecteur&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix={z}&TileCol={x}&TileRow={y}').addTo(this.allMaps['mapIGN'])
     fetch(Routing.generate('app_airtable', { record: this.id })).then((response) => {
       response.json().then((data) => {
         this.latitude = data.fields.Latitude;
@@ -40,26 +54,31 @@ export default class extends Controller {
         this.codeParcelle2 = data.fields["TYP: Parcelles"].substring(0, 2);
         this.codeParcelle4 = data.fields["TYP: Parcelles"].substring(2, 6);
         this.allParcelles = data.fields["TYP: Parcelles"].replaceAll(' ', '').split(',');
-        this.centerMap(this.map)
-        this.addMaker(this.map)
-
-        this.centerMap(this.mapUrba)
-        this.fetchParcelle(this.map);
-        this.fetchParcelle(this.mapUrba);
-        this.fetchZoneUrba(this.mapUrba);
-        this.centerMap(this.mapRPG);
-        this.fetchParcelle(this.mapRPG);
-
+        this.addMarker(this.allMaps['map'])
+        this.fetchZoneUrba(this.allMaps['mapUrba']);
+        for (let i = 0; i < this.maps.length; i++) {
+          const map = this.maps[i]
+          this.centerMap(this.allMaps[map.id])
+          this.fetchParcelle(this.allMaps[map.id])
+        }
       })
     })
 
+    this.setupFilters(this.allMaps['mapZNIEFF'])
 
-
-    this.map.on('fullscreenchange', function () {
-      const mapDiv = document.getElementById('map')
-      mapDiv.requestFullscreen()
-    })
-
+    // this.allMaps.forEach((map) => {
+    //   map.on('fullscreenchange', function () {
+    //     const mapDiv = document.getElementById(map.id)
+    //     mapDiv.requestFullscreen()
+    //   })
+    // })
+    for (let i = 0; i < this.maps.length; i++) {
+      const map = this.maps[i]
+      const mapEl = document.getElementById(map.id)
+      mapEl.addEventListener('fullscreenchange', function () {
+        mapEl.requestFullscreen()
+      })
+    }
   }
 
   /**
@@ -81,7 +100,6 @@ export default class extends Controller {
 
     new L.TileLayer(tileLayer, { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(finishedMap);
     L.control.BigImage({ position: 'topright', printControlLabel: '⤵️' }).addTo(finishedMap);
-    this.allMaps.push(finishedMap)
     return finishedMap
   }
 
@@ -104,7 +122,8 @@ export default class extends Controller {
     map.panTo(new L.LatLng(this.latitude, this.longitude))
   }
 
-  addMaker(map) {
+  addMarker(map) {
+    if (!map) return
     L.marker([this.latitude, this.longitude]).addTo(map)
   }
 
@@ -161,7 +180,7 @@ export default class extends Controller {
           color: "#FF5555"
         }).addTo(map);
       } catch (e) {
-        console.error(data);
+        console.error(e, data);
         console.error("Erreur zone Urba")
         return
       }
@@ -171,6 +190,111 @@ export default class extends Controller {
 
   alphabetPosition(text) {
     return [...text].map(a => parseInt(a, 36) - 10).filter(a => a >= 0);
+  }
+
+  setupFilters(map) {
+    console.log('here')
+    const filters = document.querySelectorAll('.filter')
+    console.log(filters)
+    filters.forEach((filter) => {
+      filter.addEventListener('change', (event) => {
+        if (event.target.checked) {
+          const fond = event.target.id
+          switch (fond) {
+            case 'oiseaux':
+              new L.TileLayer('https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZPS&style=PROTECTEDAREAS.ZPS&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}', { opacity: 0.8 }).addTo(map)
+              break;
+            case 'habitats':
+              new L.TileLayer('https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.SIC&style=PROTECTEDAREAS.SIC&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}', { opacity: 0.8 }).addTo(map)
+              break;
+            case 'pnr':
+              new L.TileLayer('https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.PNR&style=PROTECTEDAREAS.PNR&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}', { opacity: 0.8 }).addTo(map)
+              break;
+            case 'biotope':
+              new L.TileLayer('https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.APB&style=PROTECTEDAREAS.APB&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}', { opacity: 0.8 }).addTo(map)
+              break;
+            case 'znieff1':
+              new L.TileLayer('https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF1.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}', { opacity: 0.8 }).addTo(map)
+              new L.TileLayer('https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF1&style=PROTECTEDAREAS.ZNIEFF1&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}', { opacity: 0.8 }).addTo(map)
+              break;
+            case 'znieff2':
+              L.tileLayer('https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF2.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}', { 'opacity': 1.0 }).addTo(map)
+              L.tileLayer('https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF2&style=PROTECTEDAREAS.ZNIEFF2&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}', { 'opacity': 0.7 }).addTo(map)
+              break;
+            case 'parcs':
+              L.tileLayer('https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.PN&style=PROTECTEDAREAS.PN&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}', { opacity: 0.7 }).addTo(map)
+              break;
+          }
+        } else {
+          // do a similar switch case to remove the same layer that was added with the id
+          // multiple layers can have been added and it is not necessarily the layer 1
+          const fond = event.target.id
+          switch (fond) {
+            case 'oiseaux':
+              map.eachLayer((layer) => {
+                if (layer._url === 'https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZPS&style=PROTECTEDAREAS.ZPS&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}') {
+                  map.removeLayer(layer)
+                }
+              })
+              break;
+            case 'habitats':
+              map.eachLayer((layer) => {
+                if (layer._url === 'https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.SIC&style=PROTECTEDAREAS.SIC&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}') {
+                  map.removeLayer(layer)
+                }
+              })
+              break;
+            case 'pnr':
+              map.eachLayer((layer) => {
+                if (layer._url === 'https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.PNR&style=PROTECTEDAREAS.PNR&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}') {
+                  map.removeLayer(layer)
+                }
+              })
+              break;
+            case 'biotope':
+              map.eachLayer((layer) => {
+                if (layer._url === 'https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.APB&style=PROTECTEDAREAS.APB&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}') {
+                  map.removeLayer(layer)
+                }
+              }
+              )
+              break;
+            case 'znieff1':
+              map.eachLayer((layer) => {
+                if (layer._url === 'https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF1.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}') {
+                  map.removeLayer(layer)
+                }
+              })
+              map.eachLayer((layer) => {
+                if (layer._url === 'https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF1&style=PROTECTEDAREAS.ZNIEFF1&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}') {
+                  map.removeLayer(layer)
+                }
+              })
+              break;
+            case 'znieff2':
+              map.eachLayer((layer) => {
+                if (layer._url === 'https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF2.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}') {
+                  map.removeLayer(layer)
+                }
+              })
+              map.eachLayer((layer) => {
+                if (layer._url === 'https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF2&style=PROTECTEDAREAS.ZNIEFF2&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}') {
+                  map.removeLayer(layer)
+                }
+              })
+              break;
+            case 'parcs':
+              map.eachLayer((layer) => {
+                if (layer._url === 'https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.PN&style=PROTECTEDAREAS.PN&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}') {
+                  map.removeLayer(layer)
+                }
+              })
+              break;
+
+          }
+        }
+      })
+    })
   }
 
   getColorCodeCultu(codeCultu) {
