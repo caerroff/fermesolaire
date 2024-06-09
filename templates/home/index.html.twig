@@ -40,7 +40,7 @@
 			<div class="w-1/2">
 				<p class="text-center">Adresse postale la plus proche :
 					<span id="adresse" class="italic">chargement en
-																																																																																																																																																																																																																																																																																																																																			cours...</span>
+																																																																																																																																																																																																																																																																																																																																																																																																																													cours...</span>
 				</p>
 			</div>
 		</div>
@@ -111,7 +111,7 @@
 			<h3>Ensoleillement</h3>
 		</div>
 		<div class="w-1/2 border-r space-y-5">
-			<div class="map h-[40rem]" id="mapEnsolleillement"></div>
+			<iframe class="h-[40rem] w-full" src="https://apps.solargis.com/prospect/map" id="mapEnsolleillement"></iframe>
 		</div>
 	</div>
 
@@ -120,7 +120,7 @@
 			<h3>Enjeux Environnementaux</h3>
 		</div>
 		<div class="w-1/2 border-r space-y-5">
-			<div class="map h-[40rem]" id="mapEnvironnement"></div>
+			<iframe class="h-[40rem] w-full" src="https://www.observatoire-des-territoires.gouv.fr/zonage-de-politiques-publiques" id="mapEnvironnement"></iframe>
 		</div>
 	</div>
 	<div class="card">
@@ -134,25 +134,25 @@
 			<div class="w-1/2 border-r space-y-5">
 				<div class="form">
 					<form action="">
-						<input type="checkbox" name="oiseaux" id="oiseaux" checked="true"/>
+						<input type="checkbox" class="filter" name="oiseaux" id="oiseaux"/>
 						<label for="oiseaux">Oiseaux</label>
 						<br/>
-						<input type="checkbox" name="habitats" id="habitats" checked="true"/>
+						<input type="checkbox" class="filter" name="habitats" id="habitats"/>
 						<label for="habitats">Habitats</label>
 						<br/>
-						<input type="checkbox" name="pnr" id="pnr" checked="true"/>
+						<input type="checkbox" class="filter" name="pnr" id="pnr"/>
 						<label for="pnr">PNR</label>
 						<br/>
-						<input type="checkbox" name="biotope" id="biotope" checked="true"/>
+						<input type="checkbox" class="filter" name="biotope" id="biotope"/>
 						<label for="biotope">Biotope</label>
 						<br/>
-						<input type="checkbox" name="znieff1" id="znieff1" checked="true"/>
+						<input type="checkbox" class="filter" name="znieff1" id="znieff1"/>
 						<label for="znieff1">ZNIEFF 1</label>
 						<br/>
-						<input type="checkbox" name="znieff2" id="znieff2" checked="true"/>
+						<input type="checkbox" class="filter" name="znieff2" id="znieff2"/>
 						<label for="znieff2">ZNIEFF 2</label>
 						<br/>
-						<input type="checkbox" name="parcs" id="parcs" checked="true"/>
+						<input type="checkbox" class="filter" name="parcs" id="parcs"/>
 						<label for="parcs">Parcs Nationaux</label>
 					</form>
 				</div>
@@ -164,7 +164,7 @@
 			<h3>PPRI</h3>
 		</div>
 		<div class="w-1/2 border-r space-y-5">
-			<div class="map h-[40rem]" id="mapPPRI"></div>
+			<iframe class="h-[40rem] w-full" src="https://www.georisques.gouv.fr/cartes-interactives#/" id="mapPPRI"></iframe>
 		</div>
 	</div>
 
