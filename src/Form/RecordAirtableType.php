@@ -6,9 +6,9 @@ use App\Entity\RecordAirtable;
 use App\Entity\Relais;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
 class RecordAirtableType extends AbstractType
 {
@@ -21,9 +21,8 @@ class RecordAirtableType extends AbstractType
             ->add('TYPCapRacc')
             ->add('TYPNomRacc')
             ->add('TYPVilleRacc')
-            ->add('Relais', Select2EntityType::class, [
-                'class' => Relais::class,
-                'remote_route' => 'app_relais_select2',
+            ->add('Relais', EntityType::class, [
+                'class' => Relais::class
             ]);
     }
 

@@ -15,7 +15,7 @@ export default class extends Controller {
     fetch(Routing.generate('app_airtable', { record: this.id })).then((response) => {
       response.json().then((data) => {
         info.innerHTML = `
-          <table class="table">
+          <table class="table table-striped table-bordered">
           <thead>
             <tr>
               <th>Latitude</th>
@@ -30,8 +30,8 @@ export default class extends Controller {
               <td>${data.fields["TYP: Parcelles"]}</td>
             </tr>
           </table>
-          <h2 class="pt-5 text-xl">Superficie Totale</h2>
-          <p id="superficie">0</p>
+          
+          <h4 class="pt-1">Superficie Totale: <span id="superficie" class="mb-0">chargement...</span></h4>
         `;
       })
     })
