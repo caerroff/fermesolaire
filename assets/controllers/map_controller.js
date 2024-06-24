@@ -193,9 +193,7 @@ export default class extends Controller {
   }
 
   setupFilters(map) {
-    console.log('here')
     const filters = document.querySelectorAll('.filter')
-    console.log(filters)
     filters.forEach((filter) => {
       filter.addEventListener('change', (event) => {
         if (event.target.checked) {

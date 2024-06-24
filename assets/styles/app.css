@@ -1,53 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 body {
     background-color: lightgray;
 }
 
-input {
-    @apply border-2 border-gray-300 rounded-lg p-1;
-
+a:link{
+    color: white;
+    text-decoration: none;
 }
 
-.card {
-    @apply bg-gray-100 m-2 rounded-lg border-gray-600 border h-min;
+a:visited{
+    color: white;
+    text-decoration: none;
 }
-
-.card-title {
-    @apply text-center text-xl font-bold p-2 border-b-gray-800;
-}
-
-.card-body {
-    @apply bg-white text-lg rounded-b-lg p-2 border border-t-gray-400;
-}
-
-.btn {
-    @apply p-2 rounded-lg text-center self-center;
-}
-
-.btn-sm {
-    @apply p-1 text-sm rounded-lg text-center self-center;
-}
-
-.btn-primary {
-    @apply bg-blue-500 text-white m-2 p-2 rounded-2xl hover:cursor-pointer hover:bg-blue-600;
-}
-
-.btn-success {
-    @apply bg-green-600 text-white m-2 p-2 rounded-2xl hover:cursor-pointer hover:bg-green-700;
-}
-
-.btn-warning {
-    @apply bg-yellow-600 text-white m-2 p-2 rounded-2xl hover:cursor-pointer hover:bg-yellow-700;
-}
-
-.table {
-    @apply w-full border-collapse m-4;
-}
-
-.table th,
-.table td {
-    @apply border border-gray-500 p-2;
+a:hover{
+    color: white;
+    text-decoration: none;
 }

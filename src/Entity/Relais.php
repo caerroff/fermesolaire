@@ -117,4 +117,9 @@ class Relais
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return '[' . $this->commune . '] ' . $this->nom; 
+    }
 }

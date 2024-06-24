@@ -4,9 +4,9 @@
 {% endblock %}
 
 {% block body %}
-	<div class="flex">
-		<div class="card w-1/2">
-			<div class="card-title">
+	<div class="d-flex mx-2">
+		<div class="card col-6 m-1">
+			<div class="card-header">
 				<h3>Recherche de la fiche</h3>
 			</div>
 			<div class="card-body">
@@ -16,28 +16,45 @@
 							<label for="recherche" class="text-sm">Recherche</label>
 							<input type="text" name="recherche" id="recherche" class="form-control w-10/12" value="{{ recherche }}">
 						</div>
-						<button type="submit" class="w-full btn-sm btn-primary mt-2">Charger les informations</button>
+						<button type="submit" class="btn btn-sm btn-primary mt-2 col-12">Charger les informations</button>
 					</div>
 				</form>
 			</div>
 		</div>
-		<div class="card w-1/2">
-			<div class="card-title">
+		<div class="card col-6 m-1">
+			<div class="card-header">
 				<h3>Informations sur la parcelle</h3>
 			</div>
 			<div class="card-body text-center" data-controller="info">
-				<span id="info"></span>
+				<span id="info">
+					<table class="table table-active">
+						<thead>
+							<tr>
+								<th>-</th>
+								<th>-</th>
+								<th>-</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>...</td>
+								<td>...</td>
+								<td>...</td>
+							</tr>
+						</tbody>
+					</table>
+				</span>
 			</div>
 		</div>
 	</div>
 	{{form_start(form)}}
 	<div class="card">
-		<div class="card-title">
+		<div class="card-header">
 			<h3>Localisation de la parcelle</h3>
 		</div>
-		<div class="card-body flex" data-controller="map">
-			<div id="map" class="h-[40rem] w-1/2 border-r map"></div>
-			<div class="w-1/2">
+		<div class="card-body d-flex" data-controller="map">
+			<div id="map" style="height:40rem;" class="col-6 border-r map"></div>
+			<div class="col-6">
 				<p class="text-center">Adresse postale la plus proche :
 					<span id="adresse" class="italic">chargement en
 																																																																																																																																																																																																																																																																																																																																																																																																																													cours...</span>
@@ -46,60 +63,60 @@
 		</div>
 	</div>
 	<div class="card">
-		<div class="card-title">
+		<div class="card-header">
 			<h3>Urbanisme</h3>
 		</div>
-		<div class="card-body flex">
-			<div id="mapUrba" class="h-[40rem] w-1/2 border-r map"></div>
-			<div class="w-1/2">
+		<div class="card-body d-flex">
+			<div id="mapUrba" style="height:40rem;" class="col-6 border-r map"></div>
+			<div class="col-6 m-3">
 				<h2>TYP Urba</h2>
-				{{form_row(form.TYPUrba)}}
+				{{form_widget(form.TYPUrba)}}
 			</div>
 		</div>
 	</div>
 
 	<div class="card">
-		<div class="card-title">
+		<div class="card-header">
 			<h3>RPG</h3>
 		</div>
-		<div class="card-body flex">
-			<div id="mapRPG" class="h-[40rem] w-1/2 border-r map"></div>
-			<div class="w-1/2">
+		<div class="card-body d-flex">
+			<div id="mapRPG" style="height:40rem;" class="col-6 border-r map"></div>
+			<div class="col-6 m-3">
 				<h2>RPG</h2>
-				{{form_row(form.RPG)}}
+				{{form_widget(form.RPG)}}
 			</div>
 		</div>
 	</div>
 
 	<div class="card">
-		<div class="card-title">
+		<div class="card-header">
 			<h3>Parcelle IGN</h3>
 		</div>
-		<div class="card-body flex">
-			<div id="mapIGN" class="h-[40rem] w-1/2 border-r map"></div>
-			<div class="w-1/2"></div>
+		<div class="card-body">
+			<div id="mapIGN" style="height:40rem;" class="col-6 border-r map"></div>
+			<div class="col-6"></div>
 		</div>
 	</div>
 
 	<div class="card">
-		<div class="card-title">
+		<div class="card-header">
 			<h3>Capacité Réseau</h3>
 		</div>
-		<div class="card-body flex">
-			<div class="w-1/2 border-r space-y-5">
-				<div id="mapReseau" class="h-[40rem] map"></div>
-				<iframe class="h-[45rem] w-full overscroll-contain" src="https://capareseau.fr/"></iframe>
-				<iframe class="h-[45rem] w-full" src="https://data.enedis.fr/pages/cartographie-des-reseaux-contenu/"></iframe>
+		<div class="card-body d-flex">
+			<div class="col-6 border-r space-y-5">
+				<div id="mapReseau" style="height:40rem;" class="map"></div>
+				<iframe style="height:40rem;" class="col-12 overscroll-contain" src="https://capareseau.fr/"></iframe>
+				<iframe style="height:40rem;" class="col-12" src="https://data.enedis.fr/pages/cartographie-des-reseaux-contenu/"></iframe>
 			</div>
-			<div class="w-1/2">
+			<div class="col-6 m-3">
 				<h2>TYP DIS RACC</h2>
-				{{form_row(form.TYPDisRacc)}}
+				{{form_widget(form.TYPDisRacc)}}
 				<h2>TYP CAP RACC</h2>
-				{{form_row(form.TYPCapRacc)}}
+				{{form_widget(form.TYPCapRacc)}}
 				<h2>TYP NOMRACC</h2>
-				{{form_row(form.TYPNomRacc)}}
+				{{form_widget(form.TYPNomRacc)}}
 				<h2>TYP VILLERACC</h2>
-				{{form_row(form.TYPVilleRacc)}}
+				{{form_widget(form.TYPVilleRacc)}}
 				<h2>Relais</h2>
 				{{form_row(form.Relais)}}
 			</div>
@@ -107,31 +124,31 @@
 	</div>
 
 	<div class="card">
-		<div class="card-title">
+		<div class="card-header">
 			<h3>Ensoleillement</h3>
 		</div>
-		<div class="w-1/2 border-r space-y-5">
-			<iframe class="h-[40rem] w-full" src="https://apps.solargis.com/prospect/map" id="mapEnsolleillement"></iframe>
+		<div class="col-6 border-r space-y-5">
+			<iframe style="height:40rem;" class="col-12" src="https://apps.solargis.com/prospect/map" id="mapEnsolleillement"></iframe>
 		</div>
 	</div>
 
 	<div class="card">
-		<div class="card-title">
+		<div class="card-header">
 			<h3>Enjeux Environnementaux</h3>
 		</div>
-		<div class="w-1/2 border-r space-y-5">
-			<iframe class="h-[40rem] w-full" src="https://www.observatoire-des-territoires.gouv.fr/zonage-de-politiques-publiques" id="mapEnvironnement"></iframe>
-		</div>
+		{# <div class="col-6 border-r space-y-5">
+			<iframe class=" col-12" src="https://www.observatoire-des-territoires.gouv.fr/zonage-de-politiques-publiques" id="mapEnvironnement"></iframe>
+		</div> #}
 	</div>
 	<div class="card">
-		<div class="card-title">
+		<div class="card-header">
 			<h3>Map ZNIEFF / Parcs Nationaux</h3>
 		</div>
-		<div class="card-body flex">
-			<div class="w-1/2 border-r space-y-5">
-				<div class="map h-[40rem]" id="mapZNIEFF"></div>
+		<div class="card-body d-flex">
+			<div class="col-6 border-r space-y-5">
+				<div style="height:40rem;" class="map " id="mapZNIEFF"></div>
 			</div>
-			<div class="w-1/2 border-r space-y-5">
+			<div class="col-6 border-r space-y-5 m-2">
 				<div class="form">
 					<form action="">
 						<input type="checkbox" class="filter" name="oiseaux" id="oiseaux"/>
@@ -160,16 +177,16 @@
 		</div>
 	</div>
 	<div class="card">
-		<div class="card-title">
+		<div class="card-header">
 			<h3>PPRI</h3>
 		</div>
-		<div class="w-1/2 border-r space-y-5">
-			<iframe class="h-[40rem] w-full" src="https://www.georisques.gouv.fr/cartes-interactives#/" id="mapPPRI"></iframe>
+		<div class="col-6 border-r space-y-5">
+			<iframe style="height:40rem;" class=" col-12" src="https://www.georisques.gouv.fr/cartes-interactives#/" id="mapPPRI"></iframe>
 		</div>
 	</div>
 
 	<div class="card">
-		<div class="card-title">
+		<div class="card-header">
 			<h3>Autres</h3>
 		</div>
 	</div>

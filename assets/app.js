@@ -8,23 +8,17 @@ import './bootstrap.js';
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
+import './styles/app.scss';
 
 import $ from 'jquery';
 
 import Routing from "../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js";
 import routes from "../public/js/fos_js_routes.json";
 import DataTable from 'datatables.net-dt';
-import select2 from 'select2';
 
 require('@fortawesome/fontawesome-free/css/all.min.css');
 require('@fortawesome/fontawesome-free/js/all.js');
 
 Routing.setRoutingData(routes);
-
-$('.select2entity').select2({
-    width: '100%',
-    placeholder: 'Selectionner une option',
-    allowClear: true
-});
 
 export default Routing;
