@@ -62,6 +62,21 @@
             "config/packages/datatables.yaml"
         ]
     },
+    "symfony/asset-mapper": {
+        "version": "6.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.3",
+            "ref": "e8c46ba5e488fc2d7462ab6832559ab93867370a"
+        },
+        "files": [
+            "assets/app.js",
+            "assets/styles/app.css",
+            "config/packages/asset_mapper.yaml",
+            "importmap.php"
+        ]
+    },
     "symfony/console": {
         "version": "6.3",
         "recipe": {
@@ -208,7 +223,7 @@
             "webpack.config.js"
         ]
     },
-    "tetranz/select2entity-bundle": {
-        "version": "v3.1.0"
+    "symfonycasts/sass-bundle": {
+        "version": "v0.7.0"
     }
 }

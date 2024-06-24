@@ -26,8 +26,8 @@
 					<td>{{ relai.lat }}</td>
 					<td>{{ relai.lon }}</td>
 					<td>
-						<a href="{{ path('app_relais_show', {'id': relai.id}) }}">show</a>
-						<a href="{{ path('app_relais_edit', {'id': relai.id}) }}">edit</a>
+						<a class="btn btn-sm btn-primary" href="{{ path('app_relais_show', {'id': relai.id}) }}">show</a>
+						<a class="btn btn-sm btn-warning" href="{{ path('app_relais_edit', {'id': relai.id}) }}">edit</a>
 					</td>
 				</tr>
 			{% else %}
@@ -38,5 +38,5 @@
 		</tbody>
 	</table>
 
-	<a href="{{ path('app_relais_new') }}" class="btn-primary">Create new</a>
+	<a href="{{ path('app_relais_new') }}" class="btn btn-sm btn-success">Create new</a>
 {% endblock %}

@@ -7,7 +7,7 @@
 
     {{ include('relais/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_relais_index') }}">back to list</a>
+    <a class="btn btn-warning" href="{{ path('app_relais_index') }}">back to list</a>
 
     {{ include('relais/_delete_form.html.twig') }}
 {% endblock %}
