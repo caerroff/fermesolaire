@@ -18,7 +18,7 @@ class HomeController extends AbstractController
     {
         $recherche = 'receI98tyqDwdJVyf';
         $rechercheForm = $this->createFormBuilder()
-            ->add('recherche')
+            ->add('recherche', null, ['data' => $recherche])
             ->add('envoyer', SubmitType::class, ['label' => 'Rechercher'])
             ->setAction($this->generateUrl('app_home'))
             ->setMethod('POST')
@@ -40,7 +40,6 @@ class HomeController extends AbstractController
         $record = new RecordAirtable();
         $record->setRecord($reponseApi);
         $form = $this->createForm(RecordAirtableType::class, $record);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

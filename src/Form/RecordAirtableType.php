@@ -16,7 +16,6 @@ class RecordAirtableType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->setAction('/')
             ->add('TYPUrba')
             ->add('RPG', ChoiceType::class, [
                 'multiple' => true,
@@ -30,7 +29,8 @@ class RecordAirtableType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer',
-                'attr' => ['class' => 'btn btn-success text-center', 'form' => 'record_airtable'],
+                'attr' => ['class' => 'btn btn-success text-center'],
+                'form_attr' => true
             ]);
     }
 

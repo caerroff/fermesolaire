@@ -46,7 +46,6 @@
 			</div>
 		</div>
 	</div>
-	{{form_start(form)}}
 	<div class="card">
 		<div class="card-header">
 			<h3>Localisation de la parcelle</h3>
@@ -56,11 +55,13 @@
 			<div class="col-6">
 				<p class="text-center">Adresse postale la plus proche :
 					<span id="adresse" class="italic">chargement en
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																							cours...</span>
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																			cours...</span>
 				</p>
 			</div>
 		</div>
 	</div>
+	{{form_start(form)}}
+
 	<div class="card">
 		<div class="card-header">
 			<h3>Urbanisme</h3>
@@ -136,8 +137,8 @@
 			<h3>Enjeux Environnementaux</h3>
 		</div>
 		{# <div class="col-6 border-r space-y-5">
-																																																	<iframe class=" col-12" src="https://www.observatoire-des-territoires.gouv.fr/zonage-de-politiques-publiques" id="mapEnvironnement"></iframe>
-																																																</div> #}
+																																																																					<iframe class=" col-12" src="https://www.observatoire-des-territoires.gouv.fr/zonage-de-politiques-publiques" id="mapEnvironnement"></iframe>
+																																																																				</div> #}
 	</div>
 	<div class="card">
 		<div class="card-header">
@@ -149,28 +150,26 @@
 			</div>
 			<div class="col-6 border-r space-y-5 m-2">
 				<div class="form">
-					<form action="">
-						<input type="checkbox" class="filter" name="oiseaux" id="oiseaux"/>
-						<label for="oiseaux">Oiseaux</label>
-						<br/>
-						<input type="checkbox" class="filter" name="habitats" id="habitats"/>
-						<label for="habitats">Habitats</label>
-						<br/>
-						<input type="checkbox" class="filter" name="pnr" id="pnr"/>
-						<label for="pnr">PNR</label>
-						<br/>
-						<input type="checkbox" class="filter" name="biotope" id="biotope"/>
-						<label for="biotope">Biotope</label>
-						<br/>
-						<input type="checkbox" class="filter" name="znieff1" id="znieff1"/>
-						<label for="znieff1">ZNIEFF 1</label>
-						<br/>
-						<input type="checkbox" class="filter" name="znieff2" id="znieff2"/>
-						<label for="znieff2">ZNIEFF 2</label>
-						<br/>
-						<input type="checkbox" class="filter" name="parcs" id="parcs"/>
-						<label for="parcs">Parcs Nationaux</label>
-					</form>
+					<input type="checkbox" class="filter" name="oiseaux" id="oiseaux"/>
+					<label for="oiseaux">Oiseaux</label>
+					<br/>
+					<input type="checkbox" class="filter" name="habitats" id="habitats"/>
+					<label for="habitats">Habitats</label>
+					<br/>
+					<input type="checkbox" class="filter" name="pnr" id="pnr"/>
+					<label for="pnr">PNR</label>
+					<br/>
+					<input type="checkbox" class="filter" name="biotope" id="biotope"/>
+					<label for="biotope">Biotope</label>
+					<br/>
+					<input type="checkbox" class="filter" name="znieff1" id="znieff1"/>
+					<label for="znieff1">ZNIEFF 1</label>
+					<br/>
+					<input type="checkbox" class="filter" name="znieff2" id="znieff2"/>
+					<label for="znieff2">ZNIEFF 2</label>
+					<br/>
+					<input type="checkbox" class="filter" name="parcs" id="parcs"/>
+					<label for="parcs">Parcs Nationaux</label>
 				</div>
 			</div>
 		</div>
@@ -195,7 +194,6 @@
 			{{form_row(form.submit)}}
 		</div>
 	</div>
-
 	{{form_end(form)}}
 
 
