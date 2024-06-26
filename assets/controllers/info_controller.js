@@ -4,7 +4,7 @@ import { area } from '../modules/utils';
 import { getCodeInsee } from '../modules/utils';
 
 export default class extends Controller {
-  id = document.getElementById('recherche').value;
+  id = document.getElementById('form_recherche').value;
 
 
   connect() {

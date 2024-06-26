@@ -12,7 +12,7 @@ export default class extends Controller {
   maps = [];
   latitude = null;
   longitude = null;
-  id = document.getElementById('recherche').value;
+  id = document.getElementById('form_recherche').value;
   allParcelles = [];
 
   codeInsee = null;

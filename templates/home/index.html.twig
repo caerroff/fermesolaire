@@ -4,21 +4,20 @@
 {% endblock %}
 
 {% block body %}
+	{% if error is defined and error != '' %}
+		<p class="badge bg-danger">{{error}}</p>
+	{% endif %}
 	<div class="d-flex mx-2">
 		<div class="card col-6 m-1">
 			<div class="card-header">
 				<h3>Recherche de la fiche</h3>
 			</div>
 			<div class="card-body">
-				<form action="{{ path('app_home') }}" method="get" id="getRecord">
-					<div class="form-group mb-3">
-						<div class="text-center">
-							<label for="recherche" class="text-sm">Recherche</label>
-							<input type="text" name="recherche" id="recherche" class="form-control w-10/12" value="{{ recherche }}">
-						</div>
-						<button type="submit" class="btn btn-sm btn-primary mt-2 col-12">Charger les informations</button>
-					</div>
-				</form>
+				{{form_start(rechercheForm)}}
+				{{form_row(rechercheForm.recherche)}}
+
+				{{form_row(rechercheForm.envoyer)}}
+				{{form_end(rechercheForm)}}
 			</div>
 		</div>
 		<div class="card col-6 m-1">
@@ -57,7 +56,7 @@
 			<div class="col-6">
 				<p class="text-center">Adresse postale la plus proche :
 					<span id="adresse" class="italic">chargement en
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																			cours...</span>
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																							cours...</span>
 				</p>
 			</div>
 		</div>
@@ -137,8 +136,8 @@
 			<h3>Enjeux Environnementaux</h3>
 		</div>
 		{# <div class="col-6 border-r space-y-5">
-																					<iframe class=" col-12" src="https://www.observatoire-des-territoires.gouv.fr/zonage-de-politiques-publiques" id="mapEnvironnement"></iframe>
-																				</div> #}
+																																																	<iframe class=" col-12" src="https://www.observatoire-des-territoires.gouv.fr/zonage-de-politiques-publiques" id="mapEnvironnement"></iframe>
+																																																</div> #}
 	</div>
 	<div class="card">
 		<div class="card-header">

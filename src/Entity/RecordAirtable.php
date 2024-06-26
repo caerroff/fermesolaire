@@ -151,13 +151,13 @@ class RecordAirtable
     public function setRecord(array $record)
     {
         ksort($record['fields']);
-        $this->setTYPUrba($record['fields']['TYP: Urba']);
-        $this->setRPG($record['fields']['RPG']);
-        $this->setTYPDisRacc($record['fields']['TYP: DistRacc']);
-        $this->setTYPCapRacc($record['fields']['TYP: CapaRacc']);
-        $this->setTYPNomRacc($record['fields']['TYP: NomRacc']);
-        $this->setTYPVilleRacc($record['fields']['TYP: VilleRacc']);
-        $this->setTYPUrba($record['fields']['TYP: Urba']);
+        $this->setTYPUrba($record['fields']['TYP: Urba'] ?? null);
+        $this->setRPG($record['fields']['RPG'] ?? null);
+        $this->setTYPDisRacc($record['fields']['TYP: DistRacc'] ?? null);
+        $this->setTYPCapRacc($record['fields']['TYP: CapaRacc'] ?? null);
+        $this->setTYPNomRacc($record['fields']['TYP: NomRacc'] ?? null);
+        $this->setTYPVilleRacc($record['fields']['TYP: VilleRacc'] ?? null);
+        $this->setTYPUrba($record['fields']['TYP: Urba'] ?? null);
     }
 
     public function getRPG(): ?array
