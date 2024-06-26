@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use Error;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Json;
 
 class AirtableController extends AbstractController
 {
@@ -21,7 +23,7 @@ class AirtableController extends AbstractController
     #[Route('/airtable/{record}', name: 'app_airtable', options: ['expose' => true])]
     public function index(string $record): JsonResponse
     {
-        try{
+        try {
             $response = file_get_contents($this->airtable_api . $record, false, stream_context_create([
                 'http' => [
                     'method' => 'GET',
@@ -33,6 +35,21 @@ class AirtableController extends AbstractController
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
 
+    static public function getRecord(string $record): array|Error
+    {
+        try {
+            $response = file_get_contents($_ENV['API_URL'] . $record, false, stream_context_create([
+                'http' => [
+                    'method' => 'GET',
+                    'header' => 'Authorization: Bearer '
+                        . $_ENV['API_KEY']
+                ]
+            ]));
+            return json_decode($response, true);
+        } catch (\Exception $e) {
+            return new Error($e->getMessage());
+        }
     }
 }
