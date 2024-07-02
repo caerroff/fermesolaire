@@ -19,6 +19,7 @@ export default class extends Controller {
 
     // Get the info element from DOM
     const info = document.getElementById('info');
+    const solargis = document.getElementById('solargis');
 
     if (!info) return;
     fetch(Routing.generate('app_airtable', { record: this.id })).then((response) => {

@@ -55,7 +55,7 @@
 			<div class="col-6">
 				<p class="text-center">Adresse postale la plus proche :
 					<span id="adresse" class="italic">chargement en
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																			cours...</span>
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																									cours...</span>
 				</p>
 			</div>
 		</div>
@@ -127,8 +127,15 @@
 		<div class="card-header">
 			<h3>Ensoleillement</h3>
 		</div>
-		<div class="col-6 border-r space-y-5">
-			<iframe style="height:40rem;" class="col-12" src="https://apps.solargis.com/prospect/map" id="mapEnsolleillement"></iframe>
+		<div class="d-flex card-body">
+			<div class="col-6 border-r space-y-5">
+				<iframe style="height:40rem;" class="col-12" src="https://apps.solargis.com/prospect/map" id="mapEnsolleillement"></iframe>
+				<a href="https://apps.solargis.com/prospect/map" target="_blank" class="btn btn-primary">Nouvel onglet</a>
+			</div>
+			<div class="col-6">
+				<h2>TYP GHI</h2>
+				{{form_widget(form.TYPGhi)}}
+			</div>
 		</div>
 	</div>
 
@@ -136,65 +143,104 @@
 		<div class="card-header">
 			<h3>Enjeux Environnementaux</h3>
 		</div>
-		{# <div class="col-6 border-r space-y-5">
-																																																																					<iframe class=" col-12" src="https://www.observatoire-des-territoires.gouv.fr/zonage-de-politiques-publiques" id="mapEnvironnement"></iframe>
-																																																																				</div> #}
-	</div>
-	<div class="card">
-		<div class="card-header">
-			<h3>Map ZNIEFF / Parcs Nationaux</h3>
-		</div>
 		<div class="card-body d-flex">
-			<div class="col-6 border-r space-y-5">
-				<div style="height:40rem;" class="map " id="mapZNIEFF"></div>
+			<div class="col-6 border-r">
+				<iframe style="height:40rem;" class="col-12 overscroll-contain" src="https://www.observatoire-des-territoires.gouv.fr/zonage-de-politiques-publiques" id="mapEnvironnement"></iframe>
+				<div id="solargis"></div>
+				<a href="https://www.observatoire-des-territoires.gouv.fr/zonage-de-politiques-publiques" target="_blank" class="btn btn-primary">Nouvel onglet</a>
 			</div>
-			<div class="col-6 border-r space-y-5 m-2">
-				<div class="form">
-					<input type="checkbox" class="filter" name="oiseaux" id="oiseaux"/>
-					<label for="oiseaux">Oiseaux</label>
-					<br/>
-					<input type="checkbox" class="filter" name="habitats" id="habitats"/>
-					<label for="habitats">Habitats</label>
-					<br/>
-					<input type="checkbox" class="filter" name="pnr" id="pnr"/>
-					<label for="pnr">PNR</label>
-					<br/>
-					<input type="checkbox" class="filter" name="biotope" id="biotope"/>
-					<label for="biotope">Biotope</label>
-					<br/>
-					<input type="checkbox" class="filter" name="znieff1" id="znieff1"/>
-					<label for="znieff1">ZNIEFF 1</label>
-					<br/>
-					<input type="checkbox" class="filter" name="znieff2" id="znieff2"/>
-					<label for="znieff2">ZNIEFF 2</label>
-					<br/>
-					<input type="checkbox" class="filter" name="parcs" id="parcs"/>
-					<label for="parcs">Parcs Nationaux</label>
-				</div>
+			<div class="col-6">
+				<h2>TYP: Enviro</h2>
+				{{form_widget(form.TYPEnviro)}}
 			</div>
 		</div>
+
 	</div>
-	<div class="card">
-		<div class="card-header">
-			<h3>PPRI</h3>
-		</div>
+</div>
+<div class="card">
+	<div class="card-header">
+		<h3>Map ZNIEFF / Parcs Nationaux</h3>
+	</div>
+	<div class="card-body d-flex">
 		<div class="col-6 border-r space-y-5">
-			<iframe style="height:40rem;" class=" col-12" src="https://www.georisques.gouv.fr/cartes-interactives#/" id="mapPPRI"></iframe>
+			<div style="height:40rem;" class="map " id="mapZNIEFF"></div>
+		</div>
+		<div class="col-6 border-r space-y-5 m-2">
+			<h2>ZNIEFF 1 - 10km</h2>
+			{{form_widget(form.ZNIEFF1)}}
+			<h2>ZNIEFF 2 - 10km</h2>
+			{{form_widget(form.ZNIEFF2)}}
+			<h2>N 2000 - DHabitats - 10km</h2>
+			{{form_widget(form.N2000Habitats)}}
+			<h2>N 2000 - DOiseaux - 10km</h2>
+			{{form_widget(form.N2000DOiseaux)}}
+			<h2>PNR - 10 km</h2>
+			{{form_widget(form.PNR)}}
+			<h3>Filtres</h3>
+			<div class="form">
+				<input type="checkbox" class="filter" name="oiseaux" id="oiseaux"/>
+				<label for="oiseaux">Oiseaux</label>
+				<br/>
+				<input type="checkbox" class="filter" name="habitats" id="habitats"/>
+				<label for="habitats">Habitats</label>
+				<br/>
+				<input type="checkbox" class="filter" name="pnr" id="pnr"/>
+				<label for="pnr">PNR</label>
+				<br/>
+				<input type="checkbox" class="filter" name="biotope" id="biotope"/>
+				<label for="biotope">Biotope</label>
+				<br/>
+				<input type="checkbox" class="filter" name="znieff1" id="znieff1"/>
+				<label for="znieff1">ZNIEFF 1</label>
+				<br/>
+				<input type="checkbox" class="filter" name="znieff2" id="znieff2"/>
+				<label for="znieff2">ZNIEFF 2</label>
+				<br/>
+				<input type="checkbox" class="filter" name="parcs" id="parcs"/>
+				<label for="parcs">Parcs Nationaux</label>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card">
+	<div class="card-header">
+		<h3>PPRI</h3>
+	</div>
+	<div class="row">
+		<div class="col-6 border-r space-y-5">
+			<iframe style="height:40rem;" class=" col-12" allow-same-origin='true' src="https://www.georisques.gouv.fr/cartes-interactives#/" id="mapPPRI"></iframe>
+			{# <object style="height:40rem;" class=" col-12" data="https://www.georisques.gouv.fr/cartes-interactives#/" id="mapPPRI"></object> #}
+		</div>
+		<div class="col-6">
+			<h2>TYP PPRI</h2>
+			{{form_widget(form.TYPPpri)}}
+			<h2>TYP Zone PPRI</h2>
+			{{form_widget(form.TYPZonePpri)}}
+		</div>
+	</div>
+</div>
+
+<div class="card">
+	<div class="card-header">
+		<h3>Autres</h3>
+	</div>
+	<div class="row">
+		<div class="col-6 border-r"></div>
+		<div class="col-6">
+			<h2>MH</h2>
+			{{form_widget(form.MH)}}
+			<h2>Zone Humide</h2>
+			{{form_widget(form.ZoneHumide)}}
+			<h2>TYP: InfoComp</h2>
+			{{form_widget(form.TYPInfoComp)}}
 		</div>
 	</div>
 
-	<div class="card">
-		<div class="card-header">
-			<h3>Autres</h3>
-		</div>
+</div>
+
+<div class="card">
+	<div class="card-footer d-flex justify-content-center">
+		{{form_row(form.submit)}}
 	</div>
-
-	<div class="card">
-		<div class="card-footer d-flex justify-content-center">
-			{{form_row(form.submit)}}
-		</div>
-	</div>
-	{{form_end(form)}}
-
-
-{% endblock %}
+</div>
+{{form_end(form)}}{% endblock %}

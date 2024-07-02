@@ -17,6 +17,8 @@ class HomeController extends AbstractController
     public function index(Request $request, EntityManagerInterface $em): Response
     {
         $recherche = 'receI98tyqDwdJVyf';
+        // gety content for https://www.georisques.gouv.fr/cartes-interactives#/
+        $georisques = file_get_contents('https://www.georisques.gouv.fr/cartes-interactives#/');
         $rechercheForm = $this->createFormBuilder()
             ->add('recherche', null, ['data' => $recherche])
             ->add('envoyer', SubmitType::class, ['label' => 'Rechercher'])
@@ -34,7 +36,8 @@ class HomeController extends AbstractController
                 'recherche' => $recherche,
                 'rechercheForm' => $rechercheForm->createView(),
                 'form' => $form->createView(),
-                'error' => $reponseApi->getMessage()
+                'error' => $reponseApi->getMessage(),
+                'georisques' => $georisques
             ]);
         }
         $record = new RecordAirtable();
@@ -52,6 +55,7 @@ class HomeController extends AbstractController
             'recherche' => $recherche,
             'form' => $form->createView(),
             'rechercheForm' => $rechercheForm->createView(),
+            'georisques' => $georisques
         ]);
     }
 }

@@ -62,8 +62,8 @@ class RecordAirtable
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $TYPZonePpri = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $MH = null;
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $MH = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $ZoneHumide = null;
@@ -158,6 +158,20 @@ class RecordAirtable
         $this->setTYPNomRacc($record['fields']['TYP: NomRacc'] ?? null);
         $this->setTYPVilleRacc($record['fields']['TYP: VilleRacc'] ?? null);
         $this->setTYPUrba($record['fields']['TYP: Urba'] ?? null);
+        $this->setTYPEnviro($record['fields']['TYP: Enviro'] ?? null);
+        $this->setZNIEFF1($record['fields']['ZNIEFF 1 -10 km'] ?? null);
+        $this->setZNIEFF2($record['fields']['ZNIEFF 2 -10 km'] ?? null);
+        $this->setN2000Habitats($record['fields']['N 2000 - DHabitats -10 km'] ?? null);
+        // A VERIFIER
+        $this->setN2000DOiseaux($record['fields']['N 2000 - DOiseaux -10 km'] ?? null);
+        $this->setZoneHumide($record['fields']['Zone Humide'] ?? null);
+        $this->setMH($record['fields']['MH'] ?? null);
+        $this->setTYPInfoComp($record['fields']['TYP: InfoComp'] ?? null);
+        $this->setTYPPpri($record['fields']['TYP: PPRi'] ?? null);
+        $this->setTYPZonePpri($record['fields']['TYP : Zone PPRi'] ?? null);
+        $this->setTYPGhi($record['fields']['TYP: GHI'] ?? null);
+        // A VERIFIER
+        $this->setPNR($record['fields']['PNR'] ?? null);
     }
 
     public function getRPG(): ?array
@@ -287,12 +301,12 @@ class RecordAirtable
         return $this;
     }
 
-    public function getMH(): ?string
+    public function getMH(): ?array
     {
         return $this->MH;
     }
 
-    public function setMH(?string $MH): static
+    public function setMH(?array $MH): static
     {
         $this->MH = $MH;
 
