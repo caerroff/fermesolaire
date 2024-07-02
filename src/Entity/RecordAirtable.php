@@ -164,6 +164,7 @@ class RecordAirtable
         $this->setN2000Habitats($record['fields']['N 2000 - DHabitats -10 km'] ?? null);
         // A VERIFIER
         $this->setN2000DOiseaux($record['fields']['N 2000 - DOiseaux -10 km'] ?? null);
+        // A VERIFIER
         $this->setZoneHumide($record['fields']['Zone Humide'] ?? null);
         $this->setMH($record['fields']['MH'] ?? null);
         $this->setTYPInfoComp($record['fields']['TYP: InfoComp'] ?? null);

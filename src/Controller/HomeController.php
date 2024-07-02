@@ -17,7 +17,7 @@ class HomeController extends AbstractController
     public function index(Request $request, EntityManagerInterface $em): Response
     {
         $recherche = 'receI98tyqDwdJVyf';
-        // gety content for https://www.georisques.gouv.fr/cartes-interactives#/
+        // get content for https://www.georisques.gouv.fr/cartes-interactives#/
         $georisques = file_get_contents('https://www.georisques.gouv.fr/cartes-interactives#/');
         $rechercheForm = $this->createFormBuilder()
             ->add('recherche', null, ['data' => $recherche])
@@ -47,7 +47,7 @@ class HomeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $record = $form->getData();
-            dd($record);
+
             $em->persist($record);
             $em->flush();
         }

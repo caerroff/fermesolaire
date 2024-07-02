@@ -45,21 +45,61 @@ class RecordAirtableType extends AbstractType
                     'Loi Littoral' => 'Loi Littoral',
                     'Loi Montagne' => 'Loi Montagne',
                     'Aucun enjeu environnemental' => 'Aucun enjeu environnemental',
-                ]
+                ],
+                'expanded' => true,
             ])
             ->add('ZNIEFF1')
             ->add('ZNIEFF2')
             ->add('N2000Habitats')
             ->add('N2000DOiseaux')
             ->add('PNR')
-            ->add('TYPPpri')
-            ->add('TYPZonePpri')
+            ->add('TYPPpri', ChoiceType::class, [
+                'choices' => [
+                    'OUI' => 'OUI',
+                    'NON' => 'NON',
+                ]
+            ])
+            ->add('TYPZonePpri', ChoiceType::class, [
+                'choices' => [
+                    'Hors interdiction / prescription' => 'Hors interdiction / prescription',
+                    'Interdiction' => 'Interdiction',
+                    'Prescription' => 'Prescription',
+                    'NON' => 'NON',
+                ]
+            ])
             ->add('TYPGhi')
             ->add('MH', ChoiceType::class, [
-                'multiple' => true
+                'multiple' => true,
+                'choices' => [
+                    'Monument historique' => 'Monument historique',
+                    'Site classé' => 'Site classé',
+                    'Site inscrit' => 'Site inscrit',
+                    'Non concerné' => 'Non concerné',
+                    'Perimetre de protection aux abords d\'un monument historique' => 'Perimetre de protection aux abords d\'un monument historique',
+                    'Site classé en partie' => 'Site classé en partie',
+                    'zone de présomption de prescription archéologique' => 'zone de présomption de prescription archéologique',
+                    'Patrimoine mondial de l\'UNESCO' => 'Patrimoine mondial de l\'UNESCO',
+                ],
+                'attr' => [
+                    'style' => 'height: 15.5rem;',
+                ],
+                'expanded' => true,
             ])
-            ->add('ZoneHumide')
-            ->add('TYPInfoComp')
+            ->add('ZoneHumide', ChoiceType::class, [
+                'choices' => [
+                    'Zone humide effective' => 'Zone humide effective',
+                    'Zone humide probable assez forte' => 'Zone humide probable assez forte',
+                    'Zone humide probable forte' => 'Zone humide probable forte',
+                    'Zone humide probable très forte' => 'Zone humide probable très forte',
+                    'Proche d\'une zone humide probable' => 'Proche d\'une zone humide probable',
+                    'Hors zone' => 'Hors zone',
+                ]
+            ])
+            ->add('TYPInfoComp', null, [
+                'attr' => [
+                    'style' => 'height: 15.5rem;',
+                ]
+            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer',
                 'attr' => ['class' => 'btn btn-success text-center'],

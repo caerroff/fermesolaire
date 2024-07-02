@@ -55,7 +55,7 @@
 			<div class="col-6">
 				<p class="text-center">Adresse postale la plus proche :
 					<span id="adresse" class="italic">chargement en
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																									cours...</span>
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																											cours...</span>
 				</p>
 			</div>
 		</div>
@@ -103,12 +103,12 @@
 			<h3>Capacité Réseau</h3>
 		</div>
 		<div class="card-body d-flex">
-			<div class="col-6 border-r space-y-5">
+			<div class="col-6 border-r">
 				<div id="mapReseau" style="height:40rem;" class="map"></div>
 				<iframe style="height:40rem;" class="col-12 overscroll-contain" src="https://capareseau.fr/"></iframe>
 				<iframe style="height:40rem;" class="col-12" src="https://data.enedis.fr/pages/cartographie-des-reseaux-contenu/"></iframe>
 			</div>
-			<div class="col-6 m-3">
+			<div class="col-6 mx-2">
 				<h2>TYP DIS RACC</h2>
 				{{form_widget(form.TYPDisRacc)}}
 				<h2>TYP CAP RACC</h2>
@@ -206,7 +206,7 @@
 	<div class="card-header">
 		<h3>PPRI</h3>
 	</div>
-	<div class="row">
+	<div class="card-body row">
 		<div class="col-6 border-r space-y-5">
 			<iframe style="height:40rem;" class=" col-12" allow-same-origin='true' src="https://www.georisques.gouv.fr/cartes-interactives#/" id="mapPPRI"></iframe>
 			{# <object style="height:40rem;" class=" col-12" data="https://www.georisques.gouv.fr/cartes-interactives#/" id="mapPPRI"></object> #}
@@ -224,9 +224,8 @@
 	<div class="card-header">
 		<h3>Autres</h3>
 	</div>
-	<div class="row">
-		<div class="col-6 border-r"></div>
-		<div class="col-6">
+	<div class="card-body row">
+		<div class="col-12">
 			<h2>MH</h2>
 			{{form_widget(form.MH)}}
 			<h2>Zone Humide</h2>
