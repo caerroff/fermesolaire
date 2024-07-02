@@ -6,6 +6,7 @@ use App\Repository\RelaisRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RelaisRepository::class)]
 class Relais
@@ -13,6 +14,7 @@ class Relais
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['select2'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -33,6 +35,12 @@ class Relais
     public function __construct()
     {
         $this->recordAirtables = new ArrayCollection();
+    }
+
+    #[Groups(['select2'])]
+    public function getText(): string
+    {
+        return $this->nom . ' (' . $this->commune . ')';
     }
 
     public function getId(): ?int
@@ -120,6 +128,6 @@ class Relais
 
     public function __toString(): string
     {
-        return '[' . $this->commune . '] ' . $this->nom; 
+        return '[' . $this->commune . '] ' . $this->nom;
     }
 }

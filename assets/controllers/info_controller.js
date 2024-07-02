@@ -2,14 +2,24 @@ import { Controller } from '@hotwired/stimulus';
 import Routing from "../app";
 import { area } from '../modules/utils';
 import { getCodeInsee } from '../modules/utils';
+import $ from 'jquery';
 
 export default class extends Controller {
-  id = document.getElementById('recherche').value;
+  id = document.getElementById('form_recherche').value;
 
 
   connect() {
+    const submit = document.getElementById('record_airtable_submit')
+
+    // TODO: find why the form is not submitting by itself
+    submit.addEventListener('click', (event) => {
+      const form = document.querySelector('form[name="record_airtable"]');
+      form.submit();
+    })
+
     // Get the info element from DOM
     const info = document.getElementById('info');
+    const solargis = document.getElementById('solargis');
 
     if (!info) return;
     fetch(Routing.generate('app_airtable', { record: this.id })).then((response) => {

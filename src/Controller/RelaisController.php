@@ -83,6 +83,6 @@ class RelaisController extends AbstractController
     public function select2(RelaisRepository $relaisRepository): Response
     {
         $relais = $relaisRepository->findAll();
-        return $this->json($relais);
+        return $this->json($relais, 200, [], ['groups' => 'select2']);
     }
 }
