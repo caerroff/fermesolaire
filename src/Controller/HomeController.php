@@ -47,8 +47,8 @@ class HomeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $record = $form->getData();
-
             $em->persist($record);
+            dd($record);
             $em->flush();
         }
         return $this->render('home/index.html.twig', [

@@ -28,12 +28,6 @@ class RecordAirtableType extends AbstractType
             ->add('TYPCapRacc')
             ->add('TYPNomRacc')
             ->add('TYPVilleRacc')
-            ->add('Relais', EntityType::class, [
-                'class' => Relais::class,
-                'choice_label' => 'nom',
-                'placeholder' => 'Choisir un relais',
-                'required' => false
-            ])
             ->add('TYPEnviro', ChoiceType::class, [
                 'multiple' => true,
                 'choices' => [
@@ -111,6 +105,8 @@ class RecordAirtableType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => RecordAirtable::class,
+            'validation_groups' => false,
+            'allow_extra_fields' => true,
         ]);
     }
 }

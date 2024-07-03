@@ -29,8 +29,8 @@ class RecordAirtable
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $TYPVilleRacc = null;
 
-    #[ORM\ManyToOne(inversedBy: 'recordAirtables')]
-    private ?Relais $Relais = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Relais = null;
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $RPG = null;
@@ -136,12 +136,12 @@ class RecordAirtable
         return $this;
     }
 
-    public function getRelais(): ?Relais
+    public function getRelais(): ?string
     {
         return $this->Relais;
     }
 
-    public function setRelais(?Relais $Relais): static
+    public function setRelais(?string $Relais): static
     {
         $this->Relais = $Relais;
 

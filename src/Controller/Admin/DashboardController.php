@@ -17,7 +17,7 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        
+
         return $this->render('admin/dashboard.html.twig');
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
@@ -41,15 +41,13 @@ class DashboardController extends AbstractDashboardController
     {
         return Dashboard::new()
             ->setTitle('Fermesolaire')
-            ->setLocales(['fr_FR'])
-            ;
-        }
+            ->setLocales(['fr_FR']);
+    }
 
     public function configureMenuItems(): iterable
     {
         yield MenuItem::section('CRUD');
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class);
-        yield MenuItem::linkToCrud('Relais', 'fa fa-tower-cell', Relais::class);
         yield MenuItem::linkToCrud('Enregistrement Airtable', 'fa fa-database', RecordAirtable::class);
 
         yield MenuItem::section('Retour');
