@@ -55,15 +55,16 @@ export default class extends Controller {
         this.codeParcelle4 = data.fields["TYP: Parcelles"].substring(2, 6);
         this.allParcelles = data.fields["TYP: Parcelles"].replaceAll(' ', '').split(',');
         this.addMarker(this.allMaps['map'])
+        this.addMarker(this.allMaps['mapReseau'])
         this.fetchZoneUrba(this.allMaps['mapUrba']);
         for (let i = 0; i < this.maps.length; i++) {
           const map = this.maps[i]
           this.centerMap(this.allMaps[map.id])
           this.fetchParcelle(this.allMaps[map.id])
         }
+        this.loadKmz(this.allMaps['mapReseau'])
       })
     })
-
     this.setupFilters(this.allMaps['mapZNIEFF'])
 
     // this.allMaps.forEach((map) => {
@@ -116,6 +117,23 @@ export default class extends Controller {
         element.innerText = data.features[0].properties.label
       })
     })
+  }
+
+  async loadKmz(map) {
+    // open file located in ../../public/assets/kmz.json
+    const response = await fetch('/assets/kmz.json')
+    const data = await response.json()
+
+    // create a new layer with the data
+    for (let i = 0; i < data.features.length; i++) {
+      if (Math.abs(parseFloat(this.latitude) - data.features[i].geometry.coordinates[1]) > 0.3 || Math.abs(parseFloat(this.longitude) - data.features[i].geometry.coordinates[0]) > 0.3) {
+        continue
+      }
+      console.log('HERE')
+      new L.Marker([data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]).addTo(map)
+        // Add a popup to the marker
+        .bindPopup(data.features[i].properties.description)
+    }
   }
 
   centerMap(map) {
