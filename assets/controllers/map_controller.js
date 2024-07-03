@@ -129,7 +129,10 @@ export default class extends Controller {
       if (Math.abs(parseFloat(this.latitude) - data.features[i].geometry.coordinates[1]) > 0.3 || Math.abs(parseFloat(this.longitude) - data.features[i].geometry.coordinates[0]) > 0.3) {
         continue
       }
-      console.log('HERE')
+      const selectRelais = document.getElementById('record_airtable_Relais')
+      if (selectRelais) {
+        selectRelais.innerHTML += '<option value="' + data.features[i].properties.name + '">' + `[${data.features[i].id}] ` + data.features[i].properties.name + '</option>'
+      }
       new L.Marker([data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]]).addTo(map)
         // Add a popup to the marker
         .bindPopup(data.features[i].properties.description)
