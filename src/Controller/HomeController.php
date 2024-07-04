@@ -48,14 +48,22 @@ class HomeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $record = $form->getData();
             $em->persist($record);
-            dd($record);
             $em->flush();
+            return $this->redirectToRoute('update_record', ['id' => $record->getId()]);
         }
         return $this->render('home/index.html.twig', [
             'recherche' => $recherche,
             'form' => $form->createView(),
             'rechercheForm' => $rechercheForm->createView(),
             'georisques' => $georisques
+        ]);
+    }
+
+    #[Route('/update/{id}', name: 'update_record', requirements: ['id' => '\d+'])]
+    public function updateRecord(RecordAirtable $record, Request $request, EntityManagerInterface $em): Response
+    {
+        return $this->render('home/updateRecord.html.twig', [
+            'record' => $record
         ]);
     }
 }

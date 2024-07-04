@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block heading 'Enregistrement du Record' %}
+
+{% block body %}
+	<div class="card">
+		<div class="card-header">
+			<h3>Envoi du record modifié vers AirTable</h3>
+		</div>
+
+		<div class="card-body">
+			<p>Voici le record modifié qui sera enregistré dans AirTable. En cas de modification nécessaire, merci de passer par la page 'Admin'</p>
+			<span id="recordId" class="d-none">{{record.id}}</span>
+			<div class="border border-black p-2 rounded">
+				<h4>Id Airtable du record</h4>
+				<span id="airtableId" class="badge bg-warning">{{record.recordId}}</span>
+			</div>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>TYPUrba</th>
+						<th>TYPDisRacc</th>
+						<th>TYPCapRacc</th>
+						<th>TYPNomRacc</th>
+						<th>TYPVilleRacc</th>
+						<th>TYPGhi</th>
+						<th>ZNIEFF1</th>
+						<th>ZNIEFF2</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{record.TYPUrba}}</td>
+						<td>{{record.TYPDisRacc}}</td>
+						<td>{{record.TYPCapRacc}}</td>
+						<td>{{record.TYPNomRacc}}</td>
+						<td>{{record.TYPVilleRacc}}</td>
+						<td>{{record.TYPGhi}}</td>
+						<td>{{record.ZNIEFF1}}</td>
+						<td>{{record.ZNIEFF2}}</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>N2000 Habitats</th>
+						<th>N2000 D Oiseaux</th>
+						<th>PNR</th>
+						<th>TYPPpri</th>
+						<th>TYPZonePpri</th>
+						<th>Zone Humide</th>
+						<th>MH</th>
+						<th>TYPEnviro</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{record.N2000Habitats}}</td>
+						<td>{{record.N2000DOiseaux}}</td>
+						<td>{{record.PNR}}</td>
+						<td>{{record.TYPPpri}}</td>
+						<td>{{record.TYPZonePpri}}</td>
+						<td>{{record.ZoneHumide}}</td>
+						<td>
+							{% for MH in record.MH %}
+								<span class="badge bg-primary">{{MH}}</span>
+							{% endfor %}
+						</td>
+						<td>
+							{% for typ in record.TYPEnviro %}
+								<span class="badge bg-primary">{{typ}}</span>
+							{% endfor %}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<table class="table">
+				<thead>
+					<tr>
+						<th>RPG</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							{% for rpg in record.RPG %}
+								<span class="badge bg-primary">{{rpg}}</span>
+							{% endfor %}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h2>Info Complémentaires</h2>
+			<p>{{record.TYPInfoComp}}</p>
+		</div>
+
+		<div class="card-footer" data-controller="update">
+			<a href="{{ path('app_home') }}" class="btn btn-warning">Retour à l'accueil</a>
+			<button id="updateRecord" type="button" class="btn btn-success">Envoyer vers AirTable</button>
+		</div>
+
+	</div>
+
+
+{% endblock %}

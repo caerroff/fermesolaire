@@ -71,6 +71,9 @@ class RecordAirtable
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $TYPInfoComp = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $recordId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -151,6 +154,7 @@ class RecordAirtable
     public function setRecord(array $record)
     {
         ksort($record['fields']);
+        $this->setRecordId($record['id']);
         $this->setTYPUrba($record['fields']['TYP: Urba'] ?? null);
         $this->setRPG($record['fields']['RPG'] ?? null);
         $this->setTYPDisRacc($record['fields']['TYP: DistRacc'] ?? null);
@@ -173,6 +177,34 @@ class RecordAirtable
         $this->setTYPGhi($record['fields']['TYP: GHI'] ?? null);
         // A VERIFIER
         $this->setPNR($record['fields']['PNR'] ?? null);
+    }
+
+    public function getRecord()
+    {
+        $json = [];
+        $json['id'] = $this->getRecordId() ?? null;
+        $json['fields']['TYP: Urba'] = $this->getTYPUrba() ?? null;
+        if ($this->getRPG() != []) {
+            $json['fields']['RPG'] = $this->getRPG() ?? null;
+        }
+        $json['fields']['TYP: DistRacc'] = $this->getTYPDisRacc() ?? null;
+        $json['fields']['TYP: CapaRacc'] = $this->getTYPCapRacc() ?? null;
+        $json['fields']['TYP: NomRacc'] = $this->getTYPNomRacc() ?? null;
+        $json['fields']['TYP: VilleRacc'] = $this->getTYPVilleRacc() ?? null;
+        $json['fields']['TYP: Urba'] = $this->getTYPUrba() ?? null;
+        $json['fields']['TYP: Enviro'] = $this->getTYPEnviro() ?? null;
+        $json['fields']['ZNIEFF 1 -10 km'] = $this->getZNIEFF1() ?? null;
+        $json['fields']['ZNIEFF 2 -10 km'] = $this->getZNIEFF2() ?? null;
+        $json['fields']['N 2000 - DHabitats -10 km'] = $this->getN2000Habitats() ?? null;
+        $json['fields']['N 2000 - DOiseaux -10 km'] = $this->getN2000DOiseaux() ?? null;
+        $json['fields']['Zone Humide'] = $this->getZoneHumide() ?? null;
+        $json['fields']['MH'] = $this->getMH() ?? null;
+        $json['fields']['TYP: InfoComp'] = $this->getTYPInfoComp() ?? null;
+        $json['fields']['TYP: PPRi'] = $this->getTYPPpri() ?? null;
+        $json['fields']['TYP : Zone PPRi'] = $this->getTYPZonePpri() ?? null;
+        $json['fields']['TYP: GHI'] = $this->getTYPGhi() ?? null;
+        $json['fields']['PNR'] = $this->getPNR() ?? null;
+        return $json;
     }
 
     public function getRPG(): ?array
@@ -334,6 +366,18 @@ class RecordAirtable
     public function setTYPInfoComp(?string $TYPInfoComp): static
     {
         $this->TYPInfoComp = $TYPInfoComp;
+
+        return $this;
+    }
+
+    public function getRecordId(): ?string
+    {
+        return $this->recordId;
+    }
+
+    public function setRecordId(?string $recordId): static
+    {
+        $this->recordId = $recordId;
 
         return $this;
     }

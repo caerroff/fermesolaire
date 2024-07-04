@@ -37,6 +37,16 @@ class AirtableController extends AbstractController
         }
     }
 
+    #[Route('/airtable', name: 'app_airtable_infos', options: ['expose' => true])]
+    public function getApiInfos(): JsonResponse
+    {
+        $data = [
+            'api_key' => $this->airtable_api_key,
+            'api_url' => $this->airtable_api
+        ];
+        return new JsonResponse($data);
+    }
+
     static public function getRecord(string $record): array|Error
     {
         try {

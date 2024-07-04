@@ -19,8 +19,8 @@ class RecordAirtableCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->disable('new', 'edit', 'delete');
-    
+            ->disable('new', 'edit', 'delete')
+            ->add('index', 'detail');
     }
 
     /*
