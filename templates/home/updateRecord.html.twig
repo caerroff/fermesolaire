@@ -62,7 +62,11 @@
 						<td>{{record.PNR}}</td>
 						<td>{{record.TYPPpri}}</td>
 						<td>{{record.TYPZonePpri}}</td>
-						<td>{{record.ZoneHumide}}</td>
+						<td>
+							{% for zh in record.zoneHumide %}
+								<span class="badge bg-primary">{{zh}}</span>
+							{% endfor %}
+						</td>
 						<td>
 							{% for MH in record.MH %}
 								<span class="badge bg-primary">{{MH}}</span>

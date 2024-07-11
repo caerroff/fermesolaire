@@ -65,8 +65,8 @@ class RecordAirtable
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $MH = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $ZoneHumide = null;
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $ZoneHumide = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $TYPInfoComp = null;
@@ -167,16 +167,16 @@ class RecordAirtable
         $this->setZNIEFF2($record['fields']['ZNIEFF 2 -10 km'] ?? null);
         $this->setN2000Habitats($record['fields']['N 2000 - DHabitats -10 km'] ?? null);
         // A VERIFIER
-        $this->setN2000DOiseaux($record['fields']['N 2000 - DOiseaux -10 km'] ?? null);
-        // A VERIFIER
-        $this->setZoneHumide($record['fields']['Zone Humide'] ?? null);
+        $this->setN2000DOiseaux($record['fields']['N2000 - DOiseaux -10 km'] ?? null);
+        // MAUVAIS TYPE
+        $this->setZoneHumide($record['fields']['Zone humide'] ?? null);
         $this->setMH($record['fields']['MH'] ?? null);
         $this->setTYPInfoComp($record['fields']['TYP: InfoComp'] ?? null);
         $this->setTYPPpri($record['fields']['TYP: PPRi'] ?? null);
         $this->setTYPZonePpri($record['fields']['TYP : Zone PPRi'] ?? null);
         $this->setTYPGhi($record['fields']['TYP: GHI'] ?? null);
         // A VERIFIER
-        $this->setPNR($record['fields']['PNR'] ?? null);
+        $this->setPNR($record['fields']['PNR -10 km'] ?? null);
     }
 
     public function getRecord()
@@ -192,18 +192,20 @@ class RecordAirtable
         $json['fields']['TYP: NomRacc'] = $this->getTYPNomRacc() ?? null;
         $json['fields']['TYP: VilleRacc'] = $this->getTYPVilleRacc() ?? null;
         $json['fields']['TYP: Urba'] = $this->getTYPUrba() ?? null;
-        $json['fields']['TYP: Enviro'] = $this->getTYPEnviro() ?? null;
+        if ($this->getTYPEnviro() != []) {
+            $json['fields']['TYP: Enviro'] = $this->getTYPEnviro() ?? null;
+        }
         $json['fields']['ZNIEFF 1 -10 km'] = $this->getZNIEFF1() ?? null;
         $json['fields']['ZNIEFF 2 -10 km'] = $this->getZNIEFF2() ?? null;
         $json['fields']['N 2000 - DHabitats -10 km'] = $this->getN2000Habitats() ?? null;
-        $json['fields']['N 2000 - DOiseaux -10 km'] = $this->getN2000DOiseaux() ?? null;
-        $json['fields']['Zone Humide'] = $this->getZoneHumide() ?? null;
+        $json['fields']['N2000 - DOiseaux -10 km'] = $this->getN2000DOiseaux() ?? null;
+        $json['fields']['Zone humide'] = $this->getZoneHumide() ?? null;
         $json['fields']['MH'] = $this->getMH() ?? null;
         $json['fields']['TYP: InfoComp'] = $this->getTYPInfoComp() ?? null;
         $json['fields']['TYP: PPRi'] = $this->getTYPPpri() ?? null;
         $json['fields']['TYP : Zone PPRi'] = $this->getTYPZonePpri() ?? null;
         $json['fields']['TYP: GHI'] = $this->getTYPGhi() ?? null;
-        $json['fields']['PNR'] = $this->getPNR() ?? null;
+        $json['fields']['PNR -10 km'] = $this->getPNR() ?? null;
         return $json;
     }
 
@@ -346,14 +348,24 @@ class RecordAirtable
         return $this;
     }
 
-    public function getZoneHumide(): ?string
+    public function getZoneHumide(): ?array
     {
         return $this->ZoneHumide;
     }
 
-    public function setZoneHumide(?string $ZoneHumide): static
+    public function setZoneHumide(?array $ZoneHumide): static
     {
         $this->ZoneHumide = $ZoneHumide;
+
+        return $this;
+    }
+
+    public function addZoneHumide(?string $value): static
+    {
+        if (in_array($value, $this->ZoneHumide)) {
+            return $this;
+        }
+        $this->ZoneHumide[] = $value;
 
         return $this;
     }

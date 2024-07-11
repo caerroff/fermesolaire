@@ -13,7 +13,7 @@ class RecordController extends AbstractController
     #[Route('/record/{id}', name: 'internal_record_get', options: ['expose' => true])]
     public function get(RecordAirtable $record): Response
     {
-        $data = json_encode($record->getRecord(), JSON_FORCE_OBJECT);
+        $data = json_encode($record->getRecord());
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 }

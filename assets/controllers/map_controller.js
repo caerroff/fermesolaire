@@ -47,6 +47,7 @@ export default class extends Controller {
     new L.tileLayer('https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=CADASTRALPARCELS.PARCELLAIRE_EXPRESS&style=PCI%20vecteur&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix={z}&TileCol={x}&TileRow={y}').addTo(this.allMaps['mapIGN'])
     fetch(Routing.generate('app_airtable', { record: this.id })).then((response) => {
       response.json().then((data) => {
+        console.log(data)
         this.latitude = data.fields.Latitude;
         this.longitude = data.fields.Longitude;
         this.findAdresse(this.latitude, this.longitude, adresseParcelleEl)

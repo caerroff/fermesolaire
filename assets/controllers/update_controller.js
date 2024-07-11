@@ -24,10 +24,11 @@ export default class extends Controller {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${info.api_key}`,
             },
-            body: JSON.stringify(record),
+            body: JSON.stringify(delete record['id'] && record),
         });
-        // if (response.ok) {
-        //     window.location.href = '/';
-        // }
+        if (response.ok) {
+            alert('Record mis à jour avec succès');
+            window.location.href = '/';
+        }
     }
 }
