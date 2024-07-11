@@ -80,6 +80,7 @@ class RecordAirtableType extends AbstractType
                 'expanded' => true,
             ])
             ->add('ZoneHumide', ChoiceType::class, [
+                'multiple' => true,
                 'choices' => [
                     'Zone humide effective' => 'Zone humide effective',
                     'Zone humide probable assez forte' => 'Zone humide probable assez forte',
@@ -87,7 +88,8 @@ class RecordAirtableType extends AbstractType
                     'Zone humide probable très forte' => 'Zone humide probable très forte',
                     'Proche d\'une zone humide probable' => 'Proche d\'une zone humide probable',
                     'Hors zone' => 'Hors zone',
-                ]
+                ],
+                'expanded' => true,
             ])
             ->add('TYPInfoComp', null, [
                 'attr' => [
