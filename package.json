@@ -28,6 +28,7 @@
     },
     "dependencies": {
         "@hotwired/stimulus": "^3.2.2",
+        "@placemarkio/tokml": "^0.3.3",
         "@symfony/stimulus-bridge": "^3.2.2",
         "datatables.net-dt": "^2.0.8",
         "fos-router": "file:vendor/friendsofsymfony/jsrouting-bundle/Resources",
