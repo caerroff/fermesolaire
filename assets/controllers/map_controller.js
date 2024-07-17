@@ -3,6 +3,7 @@ import leaflet from "leaflet";
 import 'leaflet.bigimage';
 import Routing from "../app";
 import '../equivalents'
+import { foldersToKML, toKML } from '@placemarkio/tokml';
 
 export default class extends Controller {
   map = null;
@@ -67,6 +68,9 @@ export default class extends Controller {
       })
     })
     this.setupFilters(this.allMaps['mapZNIEFF'])
+    document.getElementById('kml').addEventListener('click', () => {
+      this.fetchKmlParcelle(this.allMaps['map'])
+    })
 
     // this.allMaps.forEach((map) => {
     //   map.on('fullscreenchange', function () {
@@ -179,6 +183,36 @@ export default class extends Controller {
         )
       })
   }
+
+  async fetchKmlParcelle(map) {
+    const response1 = await fetch('https://geo.api.gouv.fr/communes/?lat=' + this.latitude + '&lon=' +
+      this.longitude)
+    const data1 = await response1.json()
+    this.codeInsee = data1[0].code
+    let geoJsons = []
+    for (let i = 0; i < this.allParcelles.length; i++) {
+      const response2 = await fetch('https://apicarto.ign.fr/api/cadastre/parcelle?code_insee=' + await this.codeInsee + '&section=' + await this.allParcelles[i].substring(0, 2) + '&numero=' + await this.allParcelles[i].substring(2, 6), { cache: "force-cache" })
+      const data2 = await response2.json()
+      geoJsons.push(data2.features)
+      console.log(geoJsons)
+    }
+    let count = 0
+    while (geoJsons.length < this.allParcelles.length && count < 100000) {
+      console.log("Waiting for all parcels to be fetched")
+      count += 1
+    }
+    const featuresArray = []
+    for (let i = 0; i < geoJsons.length; i++) {
+      featuresArray.push(geoJsons[i][0])
+    }
+    const kml = toKML({ type: 'FeatureCollection', features: featuresArray })
+    let hiddenElement = document.createElement('a')
+    hiddenElement.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(kml)
+    hiddenElement.target = '_blank'
+    hiddenElement.download = 'parcelles.kml'
+    hiddenElement.click()
+  }
+
 
   async fetchZoneUrba(map) {
 
