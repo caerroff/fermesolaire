@@ -7,8 +7,8 @@
 	{% if error is defined and error != '' %}
 		<p class="badge bg-danger">{{error}}</p>
 	{% endif %}
-	<div class="d-flex mx-2">
-		<div class="card col-6 m-1">
+	<div class="d-flex">
+		<div class="card flex-fill mx-1">
 			<div class="card-header">
 				<h3>Recherche de la fiche</h3>
 			</div>
@@ -20,7 +20,7 @@
 				{{form_end(rechercheForm)}}
 			</div>
 		</div>
-		<div class="card col-6 m-1">
+		<div class="card flex-fill mx-1">
 			<div class="card-header">
 				<h3>Informations sur la parcelle</h3>
 			</div>
@@ -46,7 +46,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="card">
+	<div class="card my-2">
 		<div class="card-header">
 			<h3>Localisation de la parcelle</h3>
 		</div>
@@ -62,7 +62,7 @@
 	</div>
 	{{form_start(form)}}
 
-	<div class="card">
+	<div class="card my-2">
 		<div class="card-header">
 			<h3>Urbanisme</h3>
 		</div>
@@ -75,7 +75,7 @@
 		</div>
 	</div>
 
-	<div class="card">
+	<div class="card my-2">
 		<div class="card-header">
 			<h3>RPG</h3>
 		</div>
@@ -88,7 +88,7 @@
 		</div>
 	</div>
 
-	<div class="card">
+	<div class="card my-2">
 		<div class="card-header">
 			<h3>Parcelle IGN</h3>
 		</div>
@@ -98,7 +98,7 @@
 		</div>
 	</div>
 
-	<div class="card">
+	<div class="card my-2">
 		<div class="card-header">
 			<h3>Capacité Réseau</h3>
 		</div>
@@ -121,7 +121,7 @@
 		</div>
 	</div>
 
-	<div class="card">
+	<div class="card my-2">
 		<div class="card-header">
 			<h3>Ensoleillement</h3>
 		</div>
@@ -137,7 +137,7 @@
 		</div>
 	</div>
 
-	<div class="card">
+	<div class="card my-2">
 		<div class="card-header">
 			<h3>Enjeux Environnementaux</h3>
 		</div>
@@ -153,7 +153,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="card">
+	<div class="card my-2">
 		<div class="card-header">
 			<h3>Map ZNIEFF / Parcs Nationaux</h3>
 		</div>
@@ -198,7 +198,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="card">
+	<div class="card my-2">
 		<div class="card-header">
 			<h3>PPRI</h3>
 		</div>
@@ -217,7 +217,7 @@
 		</div>
 	</div>
 
-	<div class="card">
+	<div class="card my-2">
 		<div class="card-header">
 			<h3>Autres</h3>
 		</div>
@@ -231,14 +231,9 @@
 				{{form_widget(form.TYPInfoComp)}}
 			</div>
 		</div>
-
 	</div>
+</div>{% endblock %}{%block footer%}
+<div class="card-footer d-flex justify-content-center">
+	{{form_row(form.submit)}}
 </div>
-
-<div class="card">
-	<div class="card-footer d-flex justify-content-center">
-		{{form_row(form.submit)}}
-	</div>
-</div>
-
 {{form_end(form)}}{% endblock %}

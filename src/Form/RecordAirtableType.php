@@ -98,7 +98,7 @@ class RecordAirtableType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer',
-                'attr' => ['class' => 'btn btn-success text-center'],
+                'attr' => ['class' => 'btn btn-lg btn-success text-center'],
                 'form_attr' => true
             ]);
     }
