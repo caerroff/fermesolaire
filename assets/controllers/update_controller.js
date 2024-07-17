@@ -29,6 +29,8 @@ export default class extends Controller {
         if (response.ok) {
             alert('Record mis à jour avec succès');
             window.location.href = '/';
+        } else {
+            alert('Une erreur est survenue lors de la mise à jour du record !' + response.statusText);
         }
     }
 }
