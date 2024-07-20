@@ -14,21 +14,36 @@ class RPG
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $label = null;
+    private ?string $value = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $description = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLabel(): ?string
+    public function getValue(): ?string
     {
-        return $this->label;
+        return $this->value;
     }
 
-    public function setLabel(string $label): static
+    public function setValue(string $value): static
     {
-        $this->label = $label;
+        $this->value = $value;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }
