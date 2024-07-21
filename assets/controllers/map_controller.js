@@ -164,7 +164,6 @@ export default class extends Controller {
     const responseGeom = await fetch('https://apicarto.ign.fr/api/gpu/municipality?insee=' + await this.getCodeInsee())
     const jsonGeom = await responseGeom.json()
     const dataGeom = await jsonGeom
-    console.log(dataGeom)
     const geom = await dataGeom.features[0].geometry
     const response = await fetch('https://apicarto.ign.fr/api/rpg/v2?annee=2021&geom=' + await JSON.stringify(geom))
     const json = await response.json()

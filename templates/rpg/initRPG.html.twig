@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}RPG
+{% endblock %}
+
+{% block body %}
+	<div class="card">
+		<div class="card-header">
+			<h3>Initialisation des RPGs</h3>
+		</div>
+		<div class="card-body">
+			{{form_start(form)}}
+			{{form_row(form.rpg)}}
+			{{form_row(form.submit)}}
+			{{form_end(form)}}
+		</div>
+	</div>
+{% endblock %}
