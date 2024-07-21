@@ -48,11 +48,9 @@ export default class extends Controller {
     new L.tileLayer('https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=CADASTRALPARCELS.PARCELLAIRE_EXPRESS&style=PCI%20vecteur&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix={z}&TileCol={x}&TileRow={y}').addTo(this.allMaps['mapIGN'])
     fetch(Routing.generate('app_airtable', { record: this.id })).then((response) => {
       response.json().then((data) => {
-        console.log(data)
         this.latitude = data.fields.Latitude;
         this.longitude = data.fields.Longitude;
         this.findAdresse(this.latitude, this.longitude, adresseParcelleEl)
-        //this.codeInsee = data.fields.Code_Insee;
         this.codeParcelle2 = data.fields["TYP: Parcelles"].substring(0, 2);
         this.codeParcelle4 = data.fields["TYP: Parcelles"].substring(2, 6);
         this.allParcelles = data.fields["TYP: Parcelles"].replaceAll(' ', '').split(',');
@@ -65,12 +63,14 @@ export default class extends Controller {
           this.fetchParcelle(this.allMaps[map.id])
         }
         this.loadKmz(this.allMaps['mapReseau'])
+        this.addPopupRpg(this.allMaps['mapRPG'])
       })
     })
     this.setupFilters(this.allMaps['mapZNIEFF'])
     document.getElementById('kml').addEventListener('click', () => {
       this.fetchKmlParcelle(this.allMaps['map'])
     })
+
 
     // this.allMaps.forEach((map) => {
     //   map.on('fullscreenchange', function () {
@@ -103,7 +103,6 @@ export default class extends Controller {
         pseudoFullscreen: true // if true, fullscreen to page width and height
       }
     });
-
     new L.TileLayer(tileLayer, { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(finishedMap);
     L.control.BigImage({ position: 'topright', printControlLabel: '⤵️' }).addTo(finishedMap);
     return finishedMap
@@ -151,6 +150,55 @@ export default class extends Controller {
   addMarker(map) {
     if (!map) return
     L.marker([this.latitude, this.longitude]).addTo(map)
+  }
+
+  getColorCodeCultu(codeCultu) {
+    let colour = "#"
+    for (let i = 0; i < codeCultu.length; i++) {
+      colour = colour.concat((alphabetPosition(codeCultu[i]) * 10 + 5).toString(16))
+    }
+    return colour
+  }
+
+  async getRPG() {
+    const responseGeom = await fetch('https://apicarto.ign.fr/api/gpu/municipality?insee=' + await this.getCodeInsee())
+    const jsonGeom = await responseGeom.json()
+    const dataGeom = await jsonGeom
+    const geom = await dataGeom.features[0].geometry
+    const response = await fetch('https://apicarto.ign.fr/api/rpg/v2?annee=2021&geom=' + await JSON.stringify(geom))
+    const json = await response.json()
+    const data = await json
+    return await data
+  }
+
+  async addPopupRpg(map) {
+    const data = await this.getRPG()
+    L.geoJSON(data, {
+      onEachFeature: function (feature, layer) {
+        //Adding the card for onClick
+        const color = (feature) => {
+          let colour = "#"
+          for (let i = 0; i < codeCultu.length; i++) {
+            colour = colour.concat((alphabetPosition(codeCultu[i]) * 10 + 5).toString(16))
+          }
+          return colour
+        }
+        layer.options.color = color
+        layer.options.opacity = 0
+        layer.options.fillOpacity = 0.0
+        layer.addEventListener('click', () => {
+          const marker = L.marker(layer.getBounds().getCenter(), { opacity: 0 }).addTo(map)
+          let content = '<strong>' + feature.properties.code_cultu + '<br /></strong>'
+          content += (JSON.stringify(feature.properties).replaceAll(',', '<br />'))
+          marker.bindPopup('<p>' + content + '</p>').openPopup()
+          marker.addEventListener('click', () => {
+            marker.openPopup()
+          })
+        })
+
+      },
+      opacity: 0.2,
+    }).addTo(map);
   }
 
   async getCodeInsee() {
@@ -349,30 +397,5 @@ export default class extends Controller {
         }
       })
     })
-  }
-
-  getColorCodeCultu(codeCultu) {
-    let colour = "#"
-    for (let i = 0; i < codeCultu.length; i++) {
-      colour = colour.concat((this.alphabetPosition(codeCultu[i]) * 10 + 5).toString(16))
-    }
-    return colour
-  }
-
-  async getRPG(codeInsee) {
-    const responseGeom = await fetch('https://apicarto.ign.fr/api/gpu/municipality?insee=' + codeInsee)
-    const jsonGeom = await responseGeom.json()
-    const dataGeom = await jsonGeom
-    const geom = await dataGeom.features[0].geometry
-    try {
-      const response = await fetch('https://apicarto.ign.fr/api/rpg/v2?annee=2021&geom=' + JSON.stringify(geom))
-      const json = await response.json()
-      const data = await json
-      return await data
-    } catch (e) {
-      console.error("Impossible de charger les données RPG pour le code INSEE " + codeInsee)
-      return e
-    }
-
   }
 }

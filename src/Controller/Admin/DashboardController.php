@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
+use App\Entity\RPG;
 use App\Entity\Relais;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
@@ -49,6 +50,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('CRUD');
         yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class);
         yield MenuItem::linkToCrud('Enregistrement Airtable', 'fa fa-database', RecordAirtable::class);
+        yield MenuItem::linkToCrud('RPG', 'fa fa-database', RPG::class);
 
         yield MenuItem::section('Retour');
         yield MenuItem::linkToUrl('Retour au site', 'fa fa-map', '/');

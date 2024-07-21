@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\RecordAirtable;
 use App\Entity\Relais;
+use App\Repository\RPGRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -17,13 +18,14 @@ class RecordAirtableType extends AbstractType
     {
         $builder
             ->add('TYPUrba')
-            ->add('RPG', ChoiceType::class, [
-                'multiple' => true,
-                'choices' => [
-                    'Oui' => 'Oui',
-                    'Non' => 'Non'
+            ->add(
+                'RPG',
+                ChoiceType::class,
+                [
+                    'multiple' => true,
+                    'choices' => [],
                 ]
-            ])
+            )
             ->add('TYPDisRacc')
             ->add('TYPCapRacc')
             ->add('TYPNomRacc')
