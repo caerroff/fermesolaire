@@ -14,7 +14,6 @@ export default class extends Controller {
     initialize() {
         const select = document.getElementById('record_airtable_RPG');
         if (!select) return;
-        this.addRPGOptions(select);
     }
 
     async addRPGOptions(select) {

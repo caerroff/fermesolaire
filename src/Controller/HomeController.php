@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\RecordAirtable;
+use App\Entity\RPG;
 use App\Form\RecordAirtableType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -45,6 +46,12 @@ class HomeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $record = $form->getData();
+            $rpgs = $record->getRPG();
+            $record->setRPG([]);
+            foreach ($rpgs as $rpg) {
+                $rpg = $em->getRepository(RPG::class)->find($rpg);
+                $record->addRPG($rpg->getDescription());
+            }
             $em->persist($record);
             $em->flush();
             return $this->redirectToRoute('update_record', ['id' => $record->getId()]);

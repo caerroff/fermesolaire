@@ -5,15 +5,23 @@ namespace App\Form;
 use App\Entity\RecordAirtable;
 use App\Entity\Relais;
 use App\Repository\RPGRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Entity\RPG;
 
 class RecordAirtableType extends AbstractType
 {
+    private $entitymanager;
+
+    public function __construct(EntityManagerInterface $entitymanager)
+    {
+        $this->entitymanager = $entitymanager;
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -23,7 +31,11 @@ class RecordAirtableType extends AbstractType
                 ChoiceType::class,
                 [
                     'multiple' => true,
-                    'choices' => [],
+                    'choices' => [$this->entitymanager->getRepository(RPG::class)->findBy([], ['value' => 'ASC'])],
+                    'choice_label' => 'value',
+                    'choice_value' => 'id',
+                    'validation_groups' => false,
+                    'allow_extra_fields' => true,
                 ]
             )
             ->add('TYPDisRacc')
