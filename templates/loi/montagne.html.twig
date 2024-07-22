@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block heading 'Fichier Loi Montagne'%}
+
+{% block body %}
+	<h2>Mise à Jour du fichier Loi Montagne</h2>
+	{{form_start(form)}}
+	{{form_row(form.file)}}
+	{{form_row(form.submit)}}
+	{{form_end(form)}}
+{% endblock %}

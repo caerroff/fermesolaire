@@ -28,15 +28,28 @@
 				<li class="btn btn-primary mx-1 align-self-center">
 					<a href="{{ path('admin') }}">Admin</a>
 				</li>
+				<li class="btn btn-primary mx-1 align-self-center">
+					<a href="{{ path('loi_montagne')}}">Fichier Loi Montagne</a>
+				</li>
+				<li class="btn btn-primary mx-1 align-self-center">
+					<a href="{{ path('loi_littoral')}}">Fichier Loi Littoral</a>
+				</li>
 			</ul>
 		</nav>
 		<div class="card m-2">
+			{% for flash in app.flashes('success') %}
+				<div class="alert alert-success">{{ flash }}</div>
+			{% endfor %}
+			{% for flash in app.flashes('error') %}
+				<div class="alert alert-danger">{{ flash }}</div>
+			{% endfor %}
+
 			<div class="card-header">
-				<h3>{% block heading 'Cartographies'%}</h3>
-			</div>
-			<div class="card-body"> {% block body %}{% endblock %}
-				</div>
-				{% block footer %}{%endblock%}
-			</div>
-		</body>
-	</html>
+				<h3>{% block heading 'Cartographies'%}
+				</h3>
+			</body>
+		</html>
+	</body>
+</html></div><div class="card-body"> {% block body %}{% endblock %}
+</div>
+{% block footer %}{%endblock%}</div></body></html>
