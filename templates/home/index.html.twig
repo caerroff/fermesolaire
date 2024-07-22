@@ -130,7 +130,7 @@
 				<iframe style="height:40rem;" class="col-12" src="https://apps.solargis.com/prospect/map" id="mapEnsolleillement"></iframe>
 				<a href="https://apps.solargis.com/prospect/map" target="_blank" class="btn btn-primary">Nouvel onglet</a>
 			</div>
-			<div class="col-6">
+			<div class="col-6 mx-2">
 				<h2>TYP GHI</h2>
 				{{form_widget(form.TYPGhi)}}
 			</div>
@@ -143,9 +143,15 @@
 		</div>
 		<div class="card-body d-flex">
 			<div class="col-6 border-r">
-				<iframe style="height:40rem;" class="col-12 overscroll-contain" src="https://www.observatoire-des-territoires.gouv.fr/zonage-de-politiques-publiques" id="mapEnvironnement"></iframe>
-				<div id="solargis"></div>
-				<a href="https://www.observatoire-des-territoires.gouv.fr/zonage-de-politiques-publiques" target="_blank" class="btn btn-primary">Nouvel onglet</a>
+				{# <iframe style="height:40rem;" class="col-12 overscroll-contain" src="https://www.observatoire-des-territoires.gouv.fr/zonage-de-politiques-publiques" id="mapEnvironnement"></iframe> #}
+				{# <div id="solargis"></div> #}
+					<a href="https://www.observatoire-des-territoires.gouv.fr/zonage-de-politiques-publiques" target="_blank" class="btn btn-primary"> Nouvel onglet</a>
+				<h4>Présence dans le fichier Loi Montagne:
+					<span id="loiMontagne"></span>
+				</h4>
+				<h4>Présence dans le fichier Loi Littoral:
+					<span id="loiLittoral"></span>
+				</h4>
 			</div>
 			<div class="col-6 mx-2">
 				<h2>TYP: Enviro</h2>
@@ -202,13 +208,13 @@
 		<div class="card-header">
 			<h3>PPRI</h3>
 		</div>
-		<div class="card-body row">
+		<div class="card-body d-flex">
 			<div class="col-6 border-r space-y-5">
 				<iframe style="height:40rem;" class=" col-12" allow-same-origin='true' src="https://www.georisques.gouv.fr/cartes-interactives#/" id="mapPPRI"></iframe>
 				{# <object style="height:40rem;" class=" col-12" data="https://www.georisques.gouv.fr/cartes-interactives#/" id="mapPPRI"></object> #}
 				<a href="https://www.georisques.gouv.fr/cartes-interactives#/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Nouvel onglet</a>
 			</div>
-			<div class="col-6">
+			<div class="col-6 mx-2">
 				<h2>TYP PPRI</h2>
 				{{form_widget(form.TYPPpri)}}
 				<h2>TYP Zone PPRI</h2>

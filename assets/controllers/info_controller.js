@@ -6,7 +6,7 @@ import $ from 'jquery';
 
 export default class extends Controller {
   id = document.getElementById('form_recherche').value;
-
+  insee = null;
 
   connect() {
     const submit = document.getElementById('record_airtable_submit')
@@ -52,6 +52,8 @@ export default class extends Controller {
         let total = 0;
         parcelles.forEach(async parcelle => {
           const codeInsee = await getCodeInsee(data.fields.Latitude, data.fields.Longitude);
+          this.insee = codeInsee;
+          this.getLoi();
           const codeParcelle2 = parcelle.substring(0, 2);
           const codeParcelle4 = parcelle.substring(2, 6);
           const parcelleData = await this.getPointForParcelle(codeInsee, codeParcelle2, codeParcelle4);
@@ -62,6 +64,31 @@ export default class extends Controller {
         });
       })
     })
+  }
+
+  async getLoi() {
+    const response = await fetch(Routing.generate('loi_api_littoral', { code_insee: this.insee }));
+    const json = await response.json();
+    const element2 = document.createElement('div');
+    console.log(json)
+    element2.innerHTML = json.classement ?? json;
+    if (json != 'Non présent') {
+      element2.setAttribute('class', 'alert alert-danger');
+    } else {
+      element2.setAttribute('class', 'alert alert-success');
+    }
+    document.getElementById('loiLittoral').appendChild(element2);
+
+    const response2 = await fetch(Routing.generate('loi_api_montagne', { code_insee: this.insee }));
+    const json2 = await response2.json();
+    const element = document.createElement('div');
+    element.innerHTML = json2.reglementation ?? json2;
+    if (json2 != 'Non présent') {
+      element.setAttribute('class', 'alert alert-danger');
+    } else {
+      element.setAttribute('class', 'alert alert-success');
+    }
+    document.getElementById('loiMontagne').appendChild(element);
   }
 
   async getPointForParcelle(codeInsee, codeParcelle2, codeParcelle4) {
