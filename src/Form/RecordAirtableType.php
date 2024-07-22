@@ -31,7 +31,7 @@ class RecordAirtableType extends AbstractType
                 ChoiceType::class,
                 [
                     'multiple' => true,
-                    'choices' => [$this->entitymanager->getRepository(RPG::class)->findBy([], ['value' => 'ASC'])],
+                    'choices' => [$this->entitymanager->getRepository(RPG::class)->findBy([], ['value' => 'ASC'])][0],
                     'choice_label' => 'value',
                     'choice_value' => 'id',
                     'validation_groups' => false,
