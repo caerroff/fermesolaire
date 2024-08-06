@@ -47,4 +47,14 @@ class RPG
 
         return $this;
     }
+
+    public function getLabel(): string
+    {
+        return $this->__toString();
+    }
+
+    public function __toString(): string
+    {
+        return $this->value . " - " . $this->description;
+    }
 }
