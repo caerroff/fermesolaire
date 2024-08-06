@@ -4,6 +4,7 @@ import 'leaflet.bigimage';
 import Routing from "../app";
 import '../equivalents'
 import { foldersToKML, toKML } from '@placemarkio/tokml';
+import measure from '../measure';
 
 export default class extends Controller {
   map = null;
@@ -70,6 +71,18 @@ export default class extends Controller {
     document.getElementById('kml').addEventListener('click', () => {
       this.fetchKmlParcelle(this.allMaps['map'])
     })
+
+    L.Measure = {
+      linearMeasurement: "Mesure de Distance",
+      areaMeasurement: "Mesure de Surface",
+      start: "Premier Point",
+      meter: "m",
+      kilometer: "km",
+      squareMeter: "m²",
+      squareKilometers: "km²",
+    };
+  
+    L.control.measure({}).addTo(this.allMaps['mapReseau']);
 
 
     // this.allMaps.forEach((map) => {

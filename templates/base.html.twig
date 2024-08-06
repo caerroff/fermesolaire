@@ -10,6 +10,7 @@
 		rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 		{#        add leaflet.BigImage css#}
 		<link rel="stylesheet" href="https://unpkg.com/leaflet.bigimage/dist/Leaflet.BigImage.min.css">
+		<link rel="stylesheet" type="text/css" href="https://ptma.github.io/Leaflet.Measure/src/leaflet.measure.css" />
 		{% block stylesheets %}
 			{{ encore_entry_link_tags('app') }}
 		{% endblock %}
@@ -22,18 +23,18 @@
 		<nav class="d-flex py-2" style="background-color: #ccccff">
 			<img src="{{ asset('assets/logofermesolaire.svg') }}" alt="Logo Ferme Solaire" class="absolute w-1/12 ml-2 px-2 ">
 			<ul class="d-flex justify-content-center align-self-center mb-0">
-				<li class="btn btn-primary mx-1 align-self-center">
-					<a href="{{ path('app_home') }}">Accueil</a>
-				</li>
-				<li class="btn btn-primary mx-1 align-self-center">
-					<a href="{{ path('admin') }}">Admin</a>
-				</li>
-				<li class="btn btn-primary mx-1 align-self-center">
-					<a href="{{ path('loi_montagne')}}">Fichier Loi Montagne</a>
-				</li>
-				<li class="btn btn-primary mx-1 align-self-center">
-					<a href="{{ path('loi_littoral')}}">Fichier Loi Littoral</a>
-				</li>
+				<a href="{{ path('app_home') }}"><li class="btn btn-primary mx-1 align-self-center">
+					Accueil
+				</li></a>
+				<a href="{{ path('admin') }}"><li class="btn btn-primary mx-1 align-self-center">
+					Admin
+				</li></a>
+				<a href="{{ path('loi_montagne')}}"><li class="btn btn-primary mx-1 align-self-center">
+					Fichier Loi Montagne
+				</li></a>
+				<a href="{{ path('loi_littoral')}}"><li class="btn btn-primary mx-1 align-self-center">
+					Fichier Loi Littoral
+				</li></a>
 			</ul>
 		</nav>
 		<div class="card m-2">
