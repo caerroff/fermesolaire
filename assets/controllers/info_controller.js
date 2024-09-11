@@ -77,6 +77,7 @@ export default class extends Controller {
     } else {
       element2.setAttribute('class', 'alert alert-success');
     }
+    document.getElementById('loiLittoral').innerHTML = '';
     document.getElementById('loiLittoral').appendChild(element2);
 
     const response2 = await fetch(Routing.generate('loi_api_montagne', { code_insee: this.insee }));
@@ -88,6 +89,7 @@ export default class extends Controller {
     } else {
       element.setAttribute('class', 'alert alert-success');
     }
+    document.getElementById('loiMontagne').innerHTML = '';
     document.getElementById('loiMontagne').appendChild(element);
   }
 

@@ -39,6 +39,8 @@ class HomeController extends AbstractController
                 'error' => $reponseApi->getMessage(),
             ]);
         }
+        $latitude = $reponseApi['fields']['Latitude'];
+        $longitude = $reponseApi['fields']['Longitude'];
         $record = new RecordAirtable();
         $record->setRecord($reponseApi);
         $form = $this->createForm(RecordAirtableType::class, $record);
@@ -60,6 +62,8 @@ class HomeController extends AbstractController
             'recherche' => $recherche,
             'form' => $form->createView(),
             'rechercheForm' => $rechercheForm->createView(),
+            'latitude' => $latitude,
+            'longitude' => $longitude,
         ]);
     }
 

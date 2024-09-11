@@ -28,9 +28,12 @@ export default class extends Controller {
       const map = this.maps[i]
       const mapEl = document.getElementById(map.id)
       let layer;
+      let opacity = 1;
+      let maxZoom = 18;
       switch (map.id) {
         case 'mapRPG':
           layer = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          maxZoom = 16;
           break;
         case 'mapIGN':
           layer = ''
@@ -39,7 +42,7 @@ export default class extends Controller {
           layer = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
           break;
       }
-      this.allMaps[map.id] = this.mapFactory(mapEl, layer)
+      this.allMaps[map.id] = this.mapFactory(mapEl, layer, opacity, maxZoom)
     }
     const adresseParcelleEl = document.getElementById('adresse')
     new L.TileLayer("https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=LANDUSE.AGRICULTURE2021&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
@@ -47,19 +50,31 @@ export default class extends Controller {
 
     new L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { opacity: 0.85 }).addTo(this.allMaps['mapIGN'])
     new L.tileLayer('https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=CADASTRALPARCELS.PARCELLAIRE_EXPRESS&style=PCI%20vecteur&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix={z}&TileCol={x}&TileRow={y}').addTo(this.allMaps['mapIGN'])
+    new L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+      opacity: 0.8
+    }).addTo(this.allMaps['mapIGN'])
     fetch(Routing.generate('app_airtable', { record: this.id })).then((response) => {
       response.json().then((data) => {
         this.latitude = data.fields.Latitude;
         this.longitude = data.fields.Longitude;
+        document.getElementById('latlon').innerText = this.latitude + ' ' + this.longitude
+        
+        document.getElementById('latlon').addEventListener('click', function(event){
+          event.preventDefault()
+          navigator.clipboard.writeText(document.getElementById('latlon').innerText)
+        })
+
         this.findAdresse(this.latitude, this.longitude, adresseParcelleEl)
         this.codeParcelle2 = data.fields["TYP: Parcelles"].substring(0, 2);
         this.codeParcelle4 = data.fields["TYP: Parcelles"].substring(2, 6);
         this.allParcelles = data.fields["TYP: Parcelles"].replaceAll(' ', '').split(',');
-        this.addMarker(this.allMaps['map'])
         this.addMarker(this.allMaps['mapReseau'])
         this.fetchZoneUrba(this.allMaps['mapUrba']);
         for (let i = 0; i < this.maps.length; i++) {
           const map = this.maps[i]
+          if (map.id == 'map'){
+            this.fetchParcelle(this.allMaps[map.id], true)
+          }
           this.centerMap(this.allMaps[map.id])
           this.fetchParcelle(this.allMaps[map.id])
         }
@@ -82,7 +97,7 @@ export default class extends Controller {
       squareKilometers: "km²",
     };
   
-    L.control.measure({}).addTo(this.allMaps['mapReseau']);
+    L.control.measure({}).addTo(this.allMaps['mapZNIEFF']);
 
 
     // this.allMaps.forEach((map) => {
@@ -104,19 +119,21 @@ export default class extends Controller {
    * Inits a map with a tileLayer and returns it
    * @param map HTML element of the Map
    * @param tileLayer URL of the tileLayer
+   * @param opacity The opacity that will be applied to the tileLayer
    * @returns {*} The finished map
    */
-  mapFactory(map, tileLayer) {
+  mapFactory(map, tileLayer, opacity=1, maxZoom=19) {
     const finishedMap = new L.Map(map, {
       center: [46, 3],
       zoom: 12,
+      maxZoom: maxZoom,
       //fullscreenControl: true,
       // OR
       fullscreenControl: {
         pseudoFullscreen: true // if true, fullscreen to page width and height
       }
     });
-    new L.TileLayer(tileLayer, { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(finishedMap);
+    new L.TileLayer(tileLayer, { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', opacity:opacity }).addTo(finishedMap);
     L.control.BigImage({ position: 'topright', printControlLabel: '⤵️' }).addTo(finishedMap);
     return finishedMap
   }
@@ -221,7 +238,7 @@ export default class extends Controller {
     return this.codeInsee
   }
 
-  fetchParcelle(map) {
+  fetchParcelle(map, pin=false) {
     fetch('https://geo.api.gouv.fr/communes/?lat=' + this.latitude + '&lon=' +
       this.longitude).then((response) => {
         response.json().then((data) => {
@@ -229,14 +246,19 @@ export default class extends Controller {
           this.allParcelles.forEach((parcelle) => {
             fetch('https://apicarto.ign.fr/api/cadastre/parcelle?code_insee=' + this.codeInsee + '&section=' + parcelle.substring(0, 2) + '&numero=' + parcelle.substring(2, 6), { cache: "force-cache" }).then((response) => {
               response.json().then((data) => {
-                L.geoJSON(data, {
-                  onEachFeature: function (feature, layer) {
-                    // If size too small, do not add label
-                    if (layer.getBounds().getNorthEast().lat - layer.getBounds().getSouthWest().lat < 0.001) {
-                      return
+                if(pin == false){
+                  L.geoJSON(data).addTo(map)
+                }else{
+                  let polygonsWithCenters = L.layerGroup();
+                  let geoJsonLayer = L.geoJSON(data, {
+                    onEachFeature: function(feature, layer){
+                      let marker = L.marker(layer.getBounds().getCenter())
+                      let polygonAndItsCenter = L.layerGroup([layer, marker]);
+                      polygonAndItsCenter.addTo(polygonsWithCenters);
                     }
-                  }
-                }).addTo(map)
+                  })
+                  polygonsWithCenters.addTo(map);
+                }
               })
             })
           })
@@ -279,6 +301,15 @@ export default class extends Controller {
 
     this.getRPG(await this.getCodeInsee()).then((data) => {
       try {
+        const errorEl = document.getElementById("error-zone-urba")
+        if(data.features.length == 0)
+        {
+          errorEl.classList.remove('d-none')
+        } else {
+          if(!errorEl.classList.contains('d-none')){
+            errorEl.classList.add('d-none')
+          }
+        }
         L.geoJSON(data, {
           onEachFeature: function (feature, layer) {
             //Adding the card for onClick
@@ -290,6 +321,13 @@ export default class extends Controller {
               content += (feature.properties.code_cultu.toString().replaceAll(',', '<br />'))
               marker.bindPopup('<p>' + content + '</p>').openPopup()
             })
+
+            new L.Marker(layer.getBounds().getCenter(), {
+              icon: new L.DivIcon({
+                className: 'label',
+                html: '<span class="text-nowrap rounded-xl font-weight-light bg-white">' + feature.properties.code_cultu + '</span>'
+              })
+            }).addTo(map)
 
           },
           opacity: 1,
