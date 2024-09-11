@@ -325,7 +325,7 @@ export default class extends Controller {
             new L.Marker(layer.getBounds().getCenter(), {
               icon: new L.DivIcon({
                 className: 'label',
-                html: '<span class="text-nowrap rounded-xl font-weight-light bg-white">' + feature.properties.code_cultu + '</span>'
+                html: '<span class="text-nowrap rounded-xl font-weight-light bg-white" style="--bs-bg-opacity: .5;">' + feature.properties.code_cultu + '</span>'
               })
             }).addTo(map)
 
