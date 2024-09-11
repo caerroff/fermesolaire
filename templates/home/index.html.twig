@@ -232,6 +232,6 @@
 	</div>
 </div>{% endblock %}{%block footer%}
 <div class="card-footer d-flex justify-content-center">
-	{{form_row(form.submit)}}
+	{{ form_row(form.submit, { 'label': 'Valider' }) }}
 </div>
 {{form_end(form)}}{% endblock %}
