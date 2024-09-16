@@ -19,6 +19,9 @@ class RPG
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isEnable = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -56,5 +59,17 @@ class RPG
     public function __toString(): string
     {
         return $this->value . " - " . $this->description;
+    }
+
+    public function isIsEnable(): ?bool
+    {
+        return $this->isEnable;
+    }
+
+    public function setIsEnable(?bool $isEnable): static
+    {
+        $this->isEnable = $isEnable;
+
+        return $this;
     }
 }

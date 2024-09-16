@@ -49,9 +49,12 @@ class RecordAirtableCrudController extends AbstractCrudController
             TextareaField::new('TYPInfoComp')->hideOnIndex(),
             TextField::new('Relais')->hideOnIndex(),
             TextField::new('TYPGhi'),
-            CodeEditorField::new('MH')->setLanguage('js')->hideOnIndex(),
-            CodeEditorField::new('RPG')->setLanguage('js')->hideOnIndex(),
-            CodeEditorField::new('ZoneHumide')->setLanguage('js')->hideOnIndex(),
+            ArrayField::new('MH')->hideOnIndex(),
+            ArrayField::new('RPG')->hideOnIndex(),
+            ArrayField::new('ZoneHumide')->hideOnIndex(),
+            // CodeEditorField::new('MH')->setLanguage('js')->hideOnIndex(),
+            // CodeEditorField::new('RPG')->setLanguage('js')->hideOnIndex(),
+            // CodeEditorField::new('ZoneHumide')->setLanguage('js')->hideOnIndex(),
         ];
     }
 }

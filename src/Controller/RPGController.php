@@ -37,11 +37,14 @@ class RPGController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('rpg')->getData();
-            // read json file
-            $json = file_get_contents($file);
-            $json = json_decode($json, true);
-            foreach ($json as $value => $description) {
-                $em->persist((new RPG())->setValue($value)->setDescription($description));
+            // read csv file
+            $values = array_map('str_getcsv', file($file));
+            foreach ($values as $value) {
+                $line = str_getcsv($value[0], ';', '');
+                if($line[0] == "CODE_CULTURE"){
+                    continue;
+                }
+                $em->persist((new RPG())->setValue($line[0])->setDescription($line[1])->setIsEnable(false));
             }
             $em->flush();
             return $this->redirectToRoute('app_home');
