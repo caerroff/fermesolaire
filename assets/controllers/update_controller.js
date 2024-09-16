@@ -4,17 +4,26 @@ import Routing from '../app';
 export default class extends Controller {
     initialize() {
         const submit = document.getElementById('updateRecord');
+        const submitNoRpg = document.getElementById('updateRecordNoRPG');
         if (!submit) return;
+        if (!submitNoRpg) return;
         this.id = document.getElementById('recordId').innerText;
         this.airtableId = document.getElementById('airtableId').innerText;
         submit.addEventListener('click', () => {
             this.update()
         });
+        submitNoRpg.addEventListener('click', () => {
+            this.update(true)
+        });
     }
 
-    async update() {
+    async update(noRPG=false) {
         const responseRecord = await fetch(Routing.generate('internal_record_get', { id: this.id }));
         const record = await responseRecord.json();
+        console.log(record)
+        if(noRPG){
+            record["fields"]["RPG 2023"] = ["Autre"]
+        }
         const infoAirtable = await fetch(Routing.generate('app_airtable_infos'));
         const info = await infoAirtable.json();
         console.log(record)

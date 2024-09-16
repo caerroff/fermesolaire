@@ -156,7 +156,7 @@ class RecordAirtable
         ksort($record['fields']);
         $this->setRecordId($record['id']);
         $this->setTYPUrba($record['fields']['TYP: Urba'] ?? null);
-        $this->setRPG($record['fields']['RPG'] ?? null);
+        $this->setRPG($record['fields']['RPG 2023'] ?? null);
         $this->setTYPDisRacc($record['fields']['TYP: DistRacc'] ?? null);
         $this->setTYPCapRacc($record['fields']['TYP: CapaRacc'] ?? null);
         $this->setTYPNomRacc($record['fields']['TYP: NomRacc'] ?? null);
@@ -185,7 +185,7 @@ class RecordAirtable
         $json['id'] = $this->getRecordId() ?? null;
         $json['fields']['TYP: Urba'] = $this->getTYPUrba() ?? null;
         if ($this->getRPG() != []) {
-            $json['fields']['RPG'] = $this->getRPG() ?? null;
+            $json['fields']['RPG 2023'] = $this->getRPG() ?? null;
         }
         $json['fields']['TYP: DistRacc'] = $this->getTYPDisRacc() ?? null;
         $json['fields']['TYP: CapaRacc'] = $this->getTYPCapRacc() ?? null;
