@@ -23,7 +23,6 @@ export default class extends Controller {
 
   initialize() {
     this.maps = document.querySelectorAll('.map')
-
     for (let i = 0; i < this.maps.length; i++) {
       const map = this.maps[i]
       const mapEl = document.getElementById(map.id)
@@ -57,7 +56,7 @@ export default class extends Controller {
       response.json().then((data) => {
         this.latitude = data.fields.Latitude;
         this.longitude = data.fields.Longitude;
-        document.getElementById('latlon').innerText = this.latitude + ' ' + this.longitude
+        document.getElementById('latlon').innerText = this.latitude + ', ' + this.longitude
         
         document.getElementById('latlon').addEventListener('click', function(event){
           event.preventDefault()
@@ -296,10 +295,17 @@ export default class extends Controller {
     hiddenElement.click()
   }
 
+  async getPointForZoneUrba(codeInsee){
+    const response = await fetch('https://apicarto.ign.fr/api/gpu/zone-urba?partition=DU_' + codeInsee)
+    const json = await response.json()
+    const data = await json
+    return data
+  }
+
 
   async fetchZoneUrba(map) {
 
-    this.getRPG(await this.getCodeInsee()).then((data) => {
+    this.getPointForZoneUrba(await this.getCodeInsee()).then((data) => {
       try {
         const errorEl = document.getElementById("error-zone-urba")
         if(data.features.length == 0)
@@ -317,15 +323,13 @@ export default class extends Controller {
             //layer.options.color = '#CC3333'
             layer.addEventListener('click', () => {
               const marker = L.marker(layer.getBounds().getCenter(), { opacity: 0 }).addTo(map)
-              let content = ''
-              content += (feature.properties.code_cultu.toString().replaceAll(',', '<br />'))
-              marker.bindPopup('<p>' + content + '</p>').openPopup()
+              marker.bindPopup('<p>' + feature.properties.libelle + ' - ' + feature.properties.libelong + '</p>').openPopup()
             })
-
+            console.log(feature);
             new L.Marker(layer.getBounds().getCenter(), {
               icon: new L.DivIcon({
                 className: 'label',
-                html: '<span class="text-nowrap rounded-xl font-weight-light bg-white" style="--bs-bg-opacity: .5;">' + feature.properties.code_cultu + '</span>'
+                html: '<span class="text-nowrap rounded-xl font-weight-light bg-white" style="--bs-bg-opacity: .5;">' + feature.properties.libelle + '</span>'
               })
             }).addTo(map)
 

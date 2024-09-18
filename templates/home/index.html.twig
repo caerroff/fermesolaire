@@ -118,8 +118,9 @@
 				{{form_widget(form.TYPNomRacc)}}
 				<h2>TYP VILLERACC</h2>
 				{{form_widget(form.TYPVilleRacc)}}
-
-				<h2>Coordonees a rentrer dans Enedis (Cliquer sur le bouton pour copier): </h2>
+				<div class="h-50"></div>
+				<h2>Coordonees a rentrer dans Enedis (Cliquer sur le bouton pour copier):
+				</h2>
 				<button id="latlon" class="btn btn-xl btn-success"></button>
 			</div>
 		</div>
@@ -202,7 +203,7 @@
 			<h3>PPRI</h3>
 		</div>
 		<div class="card-body d-flex">
-			<div class="col-6 border-r space-y-5">
+			<div class="col-6 border-black border-r space-y-5">
 				<a href="https://www.georisques.gouv.fr/cartes-interactives#/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
 					Nouvel onglet</a>
 			</div>
@@ -220,7 +221,11 @@
 			<h3>Autres</h3>
 		</div>
 		<div class="card-body row">
-			<div class="col-12">
+			<div class="col-8 ">
+				<iframe id="map_patrimoine" style="height:40rem;" class="col-12 overscroll-contain" src="http://atlas.patrimoines.culture.fr/atlas/trunk/"></iframe>
+				<iframe style="height:60rem;" class="col-12 overscroll-contain" src="https://sig.reseau-zones-humides.org/"></iframe>
+			</div>
+			<div class="col-4">
 				<h2>MH</h2>
 				{{form_widget(form.MH)}}
 				<h2>Zone Humide</h2>
