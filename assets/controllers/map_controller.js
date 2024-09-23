@@ -9,6 +9,8 @@ import { Client } from "@googlemaps/google-maps-services-js";
 import { directions } from "@googlemaps/google-maps-services-js/dist/directions";
 import axios from "axios";
 
+const MAPBOX_TOKEN = "pk.eyJ1IjoiY2FlcnJvZmYiLCJhIjoiY20xZjRncHAyMTV3aTJqc2FzOHl1bTJsbyJ9.Fsh9vlPIq0LA4K4NQSMwjQ";
+
 export default class extends Controller {
   map = null;
   mapUrba = null;
@@ -147,7 +149,7 @@ export default class extends Controller {
     }
 
     document
-      .getElementById("googleMapsButton")
+      .getElementById("directionBtn")
       .addEventListener("click", (e) => {
         e.preventDefault();
         const arrival = document.getElementById("relaisNom").innerText;
@@ -498,37 +500,26 @@ export default class extends Controller {
     if (!arrival) {
       return;
     }
-    //AIzaSyDk0oJhO_aVvVEHLlHR2liYYOtGF3F5ryI
-    // const response = await fetch(
-    //   `https://maps.googleapis.com/maps/api/directions/json?origin=${departureLatitude},${departureLongitude}&destination=${arrival}&mode=walking&units=metric&key=`
-    // );
-    // const json = await response.json()
-    // console.log(json)
-
-    const axiosInstance = require("axios").default;
-    const { Client } = require("@googlemaps/google-maps-services-js");
-    const client = new Client({axiosInstance: axiosInstance});
+    
     const arrivalLat = arrival.split(",")[0];
     const arrivalLon = arrival.split(",")[1];
-    console.log(arrivalLat, arrivalLon);
-    client
-      .directions({
-        params: {
-          // origin: [{lat : departureLatitude, lng: departureLongitude}],
-          // destination: [{lat: arrivalLat, lng:arrivalLon}],
-          key: "AIzaSyDk0oJhO_aVvVEHLlHR2liYYOtGF3F5ryI",
-          origin: [departureLatitude, departureLongitude],
-          destination: [arrivalLat, arrivalLon],
-          mode: "walking",
-          units: "metric",
-        },
-      })
-      .then((r) => {
-        console.log(r.data.results[0]);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+    //AIzaSyDk0oJhO_aVvVEHLlHR2liYYOtGF3F5ryI
+    const response = await fetch(
+      `https://api.mapbox.com/directions/v5/mapbox/walking/${departureLongitude},${departureLatitude};${arrivalLon},${arrivalLat}?access_token=${MAPBOX_TOKEN}`
+      // `https://api.mapbox.com/directions/v5/mapbox/walking/${departureLongitude},${departureLatitude};${arrivalLon},${arrivalLat}?access_token=pk.eyJ1IjoiY2FlcnJvZmYiLCJhIjoiY20xZjRncHAyMTV3aTJqc2FzOHl1bTJsbyJ9.Fsh9vlPIq0LA4K4NQSMwjQ`
+      // "https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?access_token=pk.eyJ1IjoiY2FlcnJvZmYiLCJhIjoiY20xZjRncHAyMTV3aTJqc2FzOHl1bTJsbyJ9.Fsh9vlPIq0LA4K4NQSMwjQ"
+    );
+    const json = await response.json()
+    const paragraph = document.getElementById('responseDirection')
+    paragraph.innerText = `La distance entre les deux points (en passant par les routes/chemins) est de ${json.routes[0].distance}km et le temps de trajet est de ${this.convertSeconds(json.routes[0].duration)}`    
+  }
+
+  convertSeconds (seconds) {
+    console.log(seconds)
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
+  
+    return `${hours} heure(s) : ${minutes} minute(s)`
   }
 
   setupFilters(map) {
