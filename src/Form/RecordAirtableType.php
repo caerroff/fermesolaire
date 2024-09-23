@@ -53,6 +53,8 @@ class RecordAirtableType extends AbstractType
                     'Parc Naturel Régional' => 'Parc Naturel Régional',
                     'Loi Littoral' => 'Loi Littoral',
                     'Loi Montagne' => 'Loi Montagne',
+                    'Biotope' => 'Biotope',
+                    'Parcs Nationaux' => 'Parcs Nationaux',
                     'Aucun enjeu environnemental' => 'Aucun enjeu environnemental',
                 ],
                 'expanded' => true,

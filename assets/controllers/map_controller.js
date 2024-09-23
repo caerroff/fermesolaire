@@ -233,11 +233,17 @@ export default class extends Controller {
           data.features[i].properties.name +
           "</option>";
       }
-
+      const icon = L.icon({
+        iconUrl: 'assets/marker.png',
+        iconSize: [28,40],
+        iconAnchor: [14, 32]
+      })
       const marker = new L.Marker([
         data.features[i].geometry.coordinates[1],
         data.features[i].geometry.coordinates[0],
-      ])
+      ], {
+        icon: icon
+      })
         .addTo(map)
         // Add a popup to the marker
         .bindPopup(data.features[i].properties.description);
@@ -503,7 +509,6 @@ export default class extends Controller {
     
     const arrivalLat = arrival.split(",")[0];
     const arrivalLon = arrival.split(",")[1];
-    //AIzaSyDk0oJhO_aVvVEHLlHR2liYYOtGF3F5ryI
     const response = await fetch(
       `https://api.mapbox.com/directions/v5/mapbox/walking/${departureLongitude},${departureLatitude};${arrivalLon},${arrivalLat}?access_token=${MAPBOX_TOKEN}`
       // `https://api.mapbox.com/directions/v5/mapbox/walking/${departureLongitude},${departureLatitude};${arrivalLon},${arrivalLat}?access_token=pk.eyJ1IjoiY2FlcnJvZmYiLCJhIjoiY20xZjRncHAyMTV3aTJqc2FzOHl1bTJsbyJ9.Fsh9vlPIq0LA4K4NQSMwjQ`
@@ -511,7 +516,7 @@ export default class extends Controller {
     );
     const json = await response.json()
     const paragraph = document.getElementById('responseDirection')
-    paragraph.innerText = `La distance entre les deux points (en passant par les routes/chemins) est de ${json.routes[0].distance}km et le temps de trajet est de ${this.convertSeconds(json.routes[0].duration)}`    
+    paragraph.innerText = `La distance entre les deux points (en passant par les routes/chemins) est de ${json.routes[0].distance / 1000}km et le temps de trajet est de ${this.convertSeconds(json.routes[0].duration)}`    
   }
 
   convertSeconds (seconds) {

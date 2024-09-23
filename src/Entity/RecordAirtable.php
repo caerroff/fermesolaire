@@ -205,7 +205,7 @@ class RecordAirtable
         $json['fields']['N 2000 - DHabitats -10 km'] = $this->getN2000Habitats() ?? null;
         $json['fields']['N2000 - DOiseaux -10 km'] = $this->getN2000DOiseaux() ?? null;
         $json['fields']['Biotope -10 km'] = $this->getBiotope() ?? null;
-        $json['fields']['Parcs Nationaux -10 km'] = $this->getN2000DOiseaux() ?? null;
+        $json['fields']['Parcs Nationaux -10 km'] = $this->getParcNationaux() ?? null;
         $json['fields']['Zone humide'] = $this->getZoneHumide() ?? null;
         $json['fields']['MH'] = $this->getMH() ?? null;
         $json['fields']['TYP: InfoComp'] = $this->getTYPInfoComp() ?? null;
