@@ -74,6 +74,12 @@ class RecordAirtable
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $recordId = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Biotope = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $ParcNationaux = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -156,7 +162,7 @@ class RecordAirtable
         ksort($record['fields']);
         $this->setRecordId($record['id']);
         $this->setTYPUrba($record['fields']['TYP: Urba'] ?? null);
-        $this->setRPG($record['fields']['RPG 2023'] ?? null);
+        $this->setRPG($record['fields']['RPG 2023 intranet'] ?? null);
         $this->setTYPDisRacc($record['fields']['TYP: DistRacc'] ?? null);
         $this->setTYPCapRacc($record['fields']['TYP: CapaRacc'] ?? null);
         $this->setTYPNomRacc($record['fields']['TYP: NomRacc'] ?? null);
@@ -166,16 +172,15 @@ class RecordAirtable
         $this->setZNIEFF1($record['fields']['ZNIEFF 1 -10 km'] ?? null);
         $this->setZNIEFF2($record['fields']['ZNIEFF 2 -10 km'] ?? null);
         $this->setN2000Habitats($record['fields']['N 2000 - DHabitats -10 km'] ?? null);
-        // A VERIFIER
+        $this->setBiotope($record['fields']['Biotope -10 km'] ?? null);
+        $this->setParcNationaux($record['fields']['Parcs Nationaux -10 km'] ?? null);
         $this->setN2000DOiseaux($record['fields']['N2000 - DOiseaux -10 km'] ?? null);
-        // MAUVAIS TYPE
         $this->setZoneHumide($record['fields']['Zone humide'] ?? null);
         $this->setMH($record['fields']['MH'] ?? null);
         $this->setTYPInfoComp($record['fields']['TYP: InfoComp'] ?? null);
         $this->setTYPPpri($record['fields']['TYP: PPRi'] ?? null);
         $this->setTYPZonePpri($record['fields']['TYP : Zone PPRi'] ?? null);
         $this->setTYPGhi($record['fields']['TYP: GHI'] ?? null);
-        // A VERIFIER
         $this->setPNR($record['fields']['PNR -10 km'] ?? null);
     }
 
@@ -185,7 +190,7 @@ class RecordAirtable
         $json['id'] = $this->getRecordId() ?? null;
         $json['fields']['TYP: Urba'] = $this->getTYPUrba() ?? null;
         if ($this->getRPG() != []) {
-            $json['fields']['RPG 2023'] = $this->getRPG() ?? null;
+            $json['fields']['RPG 2023 intranet'] = $this->getRPG() ?? null;
         }
         $json['fields']['TYP: DistRacc'] = $this->getTYPDisRacc() ?? null;
         $json['fields']['TYP: CapaRacc'] = $this->getTYPCapRacc() ?? null;
@@ -199,6 +204,8 @@ class RecordAirtable
         $json['fields']['ZNIEFF 2 -10 km'] = $this->getZNIEFF2() ?? null;
         $json['fields']['N 2000 - DHabitats -10 km'] = $this->getN2000Habitats() ?? null;
         $json['fields']['N2000 - DOiseaux -10 km'] = $this->getN2000DOiseaux() ?? null;
+        $json['fields']['Biotope -10 km'] = $this->getBiotope() ?? null;
+        $json['fields']['Parcs Nationaux -10 km'] = $this->getN2000DOiseaux() ?? null;
         $json['fields']['Zone humide'] = $this->getZoneHumide() ?? null;
         $json['fields']['MH'] = $this->getMH() ?? null;
         $json['fields']['TYP: InfoComp'] = $this->getTYPInfoComp() ?? null;
@@ -390,6 +397,30 @@ class RecordAirtable
     public function setRecordId(?string $recordId): static
     {
         $this->recordId = $recordId;
+
+        return $this;
+    }
+
+    public function getBiotope(): ?string
+    {
+        return $this->Biotope;
+    }
+
+    public function setBiotope(?string $Biotope): static
+    {
+        $this->Biotope = $Biotope;
+
+        return $this;
+    }
+
+    public function getParcNationaux(): ?string
+    {
+        return $this->ParcNationaux;
+    }
+
+    public function setParcNationaux(?string $ParcNationaux): static
+    {
+        $this->ParcNationaux = $ParcNationaux;
 
         return $this;
     }

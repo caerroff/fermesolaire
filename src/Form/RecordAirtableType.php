@@ -61,6 +61,8 @@ class RecordAirtableType extends AbstractType
             ->add('ZNIEFF2')
             ->add('N2000Habitats')
             ->add('N2000DOiseaux')
+            ->add('Biotope')
+            ->add('ParcNationaux')
             ->add('PNR')
             ->add('TYPPpri', ChoiceType::class, [
                 'choices' => [

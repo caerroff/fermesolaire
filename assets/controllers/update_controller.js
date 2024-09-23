@@ -22,7 +22,7 @@ export default class extends Controller {
         const record = await responseRecord.json();
         console.log(record)
         if(noRPG){
-            record["fields"]["RPG 2023"] = ["Autre"]
+            record["fields"]["RPG 2023 intranet"] = ["Autre"]
         }
         const infoAirtable = await fetch(Routing.generate('app_airtable_infos'));
         const info = await infoAirtable.json();

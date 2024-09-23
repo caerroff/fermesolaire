@@ -118,6 +118,10 @@
 				{{form_widget(form.TYPNomRacc)}}
 				<h2>TYP VILLERACC</h2>
 				{{form_widget(form.TYPVilleRacc)}}
+				<h3>Pour utiliser l'API Google Maps :</h3>
+				<p>Cliquer sur le relais que l'on veut tester. Les coordonées devraient apparaitre ci-dessous, puis cliquer sur "Distance Google Maps"</p>
+				<p>Distance avec le relais <span id="relaisNom"></span></p>
+				<button id="googleMapsButton" class="btn btn-primary">Distance Google Maps</button>
 				<div class="h-50"></div>
 				<h2>Coordonees a rentrer dans Enedis (Cliquer sur le bouton pour copier):
 				</h2>
@@ -160,18 +164,42 @@
 
 			</div>
 			<div class="col-6">
-				<h2>TYP: Enviro</h2>
-				{{form_widget(form.TYPEnviro)}}
-				<h2>ZNIEFF 1 - 10km</h2>
-				{{form_widget(form.ZNIEFF1)}}
-				<h2>ZNIEFF 2 - 10km</h2>
-				{{form_widget(form.ZNIEFF2)}}
-				<h2>N 2000 - DHabitats - 10km</h2>
-				{{form_widget(form.N2000Habitats)}}
-				<h2>N 2000 - DOiseaux - 10km</h2>
-				{{form_widget(form.N2000DOiseaux)}}
-				<h2>PNR - 10 km</h2>
-				{{form_widget(form.PNR)}}
+				<div class="row">
+					<div class="col-4">
+						<h2>TYP: Enviro</h2>
+						{{form_widget(form.TYPEnviro)}}
+					</div>
+					<div class="col-8">
+						<div class="d-flex">
+							<p>ZNIEFF 1 - 10km</p>
+							{{form_widget(form.ZNIEFF1)}}
+						</div>
+						<div class="d-flex">
+							<p>ZNIEFF 2 - 10km</p>
+							{{form_widget(form.ZNIEFF2)}}
+						</div>
+						<div class="d-flex">
+							<p>N 2000 - DHabitats - 10km</p>
+							{{form_widget(form.N2000Habitats)}}
+						</div>
+						<div class="d-flex">
+							<p>N 2000 - DOiseaux - 10km</p>
+							{{form_widget(form.N2000DOiseaux)}}
+						</div>
+						<div class="d-flex">
+							<p>PNR - 10 km</p>
+							{{form_widget(form.PNR)}}
+						</div>
+						<div class="d-flex">
+							<p>Biotope - 10 km</p>
+							{{form_widget(form.Biotope)}}
+						</div>
+						<div class="d-flex">
+							<p>Parcs Nationaux - 10 km</p>
+							{{form_widget(form.ParcNationaux)}}
+						</div>
+					</div>
+				</div>
 				<h3>Filtres</h3>
 				<div class="form">
 					<input type="checkbox" class="filter" name="oiseaux" id="oiseaux"/>
