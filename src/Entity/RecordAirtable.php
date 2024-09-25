@@ -80,6 +80,12 @@ class RecordAirtable
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $ParcNationaux = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $latitude = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $longitude = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -160,6 +166,8 @@ class RecordAirtable
     public function setRecord(array $record)
     {
         ksort($record['fields']);
+        $this->setLatitude($record['fields']['Latitude'] ?? null);
+        $this->setLongitude($record['fields']['Longitude'] ?? null);
         $this->setRecordId($record['id']);
         $this->setTYPUrba($record['fields']['TYP: Urba'] ?? null);
         $this->setRPG($record['fields']['RPG 2023 intranet'] ?? null);
@@ -172,8 +180,8 @@ class RecordAirtable
         $this->setZNIEFF1($record['fields']['ZNIEFF 1 -10 km'] ?? null);
         $this->setZNIEFF2($record['fields']['ZNIEFF 2 -10 km'] ?? null);
         $this->setN2000Habitats($record['fields']['N 2000 - DHabitats -10 km'] ?? null);
-        $this->setBiotope($record['fields']['Biotope -10 km'] ?? null);
-        $this->setParcNationaux($record['fields']['Parcs Nationaux -10 km'] ?? null);
+        $this->setBiotope($record['fields']['Biotope 1-10 km'] ?? null);
+        $this->setParcNationaux($record['fields']['Parc National 1-10 km'] ?? null);
         $this->setN2000DOiseaux($record['fields']['N2000 - DOiseaux -10 km'] ?? null);
         $this->setZoneHumide($record['fields']['Zone humide'] ?? null);
         $this->setMH($record['fields']['MH'] ?? null);
@@ -193,6 +201,8 @@ class RecordAirtable
             $json['fields']['RPG 2023 intranet'] = $this->getRPG() ?? null;
         }
         $json['fields']['TYP: DistRacc'] = $this->getTYPDisRacc() ?? null;
+        $json['fields']['Latitude'] = $this->getLatitude() ?? null;
+        $json['fields']['Longitude'] = $this->getLongitude() ?? null;
         $json['fields']['TYP: CapaRacc'] = $this->getTYPCapRacc() ?? null;
         $json['fields']['TYP: NomRacc'] = $this->getTYPNomRacc() ?? null;
         $json['fields']['TYP: VilleRacc'] = $this->getTYPVilleRacc() ?? null;
@@ -204,8 +214,8 @@ class RecordAirtable
         $json['fields']['ZNIEFF 2 -10 km'] = $this->getZNIEFF2() ?? null;
         $json['fields']['N 2000 - DHabitats -10 km'] = $this->getN2000Habitats() ?? null;
         $json['fields']['N2000 - DOiseaux -10 km'] = $this->getN2000DOiseaux() ?? null;
-        $json['fields']['Biotope -10 km'] = $this->getBiotope() ?? null;
-        $json['fields']['Parcs Nationaux -10 km'] = $this->getParcNationaux() ?? null;
+        $json['fields']['Biotope 1-10 km'] = $this->getBiotope() ?? null;
+        $json['fields']['Parc National 1-10 km'] = $this->getParcNationaux() ?? null;
         $json['fields']['Zone humide'] = $this->getZoneHumide() ?? null;
         $json['fields']['MH'] = $this->getMH() ?? null;
         $json['fields']['TYP: InfoComp'] = $this->getTYPInfoComp() ?? null;
@@ -421,6 +431,30 @@ class RecordAirtable
     public function setParcNationaux(?string $ParcNationaux): static
     {
         $this->ParcNationaux = $ParcNationaux;
+
+        return $this;
+    }
+
+    public function getLatitude(): ?string
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(?string $latitude): static
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?string
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(?string $longitude): static
+    {
+        $this->longitude = $longitude;
 
         return $this;
     }

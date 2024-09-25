@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\RPG;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class RecordAirtableType extends AbstractType
 {
@@ -26,6 +27,14 @@ class RecordAirtableType extends AbstractType
     {
         $builder
             ->add('TYPUrba')
+            ->add('latitude', TextType::class, [
+                "required" => false,
+                "attr" => ["class" => "d-none"]
+            ])
+            ->add('longitude', TextType::class, [
+                "required" => false,
+                "attr" => ["class" => "d-none"]
+            ])            
             ->add(
                 'RPG',
                 ChoiceType::class,

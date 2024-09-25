@@ -9,7 +9,8 @@ import { Client } from "@googlemaps/google-maps-services-js";
 import { directions } from "@googlemaps/google-maps-services-js/dist/directions";
 import axios from "axios";
 
-const MAPBOX_TOKEN = "pk.eyJ1IjoiY2FlcnJvZmYiLCJhIjoiY20xZjRncHAyMTV3aTJqc2FzOHl1bTJsbyJ9.Fsh9vlPIq0LA4K4NQSMwjQ";
+const MAPBOX_TOKEN =
+  "pk.eyJ1IjoiY2FlcnJvZmYiLCJhIjoiY20xZjRncHAyMTV3aTJqc2FzOHl1bTJsbyJ9.Fsh9vlPIq0LA4K4NQSMwjQ";
 
 export default class extends Controller {
   map = null;
@@ -52,7 +53,7 @@ export default class extends Controller {
     }
     const adresseParcelleEl = document.getElementById("adresse");
     new L.TileLayer(
-      "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=LANDUSE.AGRICULTURE2021&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
+      "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=LANDUSE.AGRICULTURE2023&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
       { opacity: 0.8 }
     ).addTo(this.allMaps["mapRPG"]);
 
@@ -75,10 +76,13 @@ export default class extends Controller {
       {
         transparent: true,
         format: "image/png",
-        layers: ['du', 'psmv'],
-        bounds: L.latLngBounds([[-54.5247541978, 2.05338918702],[9.56001631027, 51.1485061713]])
+        layers: ["du", "psmv"],
+        bounds: L.latLngBounds([
+          [-54.5247541978, 2.05338918702],
+          [9.56001631027, 51.1485061713],
+        ]),
       }
-    ).addTo(this.allMaps["mapUrba"])
+    ).addTo(this.allMaps["mapUrba"]);
     fetch(Routing.generate("app_airtable", { record: this.id })).then(
       (response) => {
         response.json().then((data) => {
@@ -114,6 +118,31 @@ export default class extends Controller {
           }
           this.loadKmz(this.allMaps["mapReseau"]);
           this.addPopupRpg(this.allMaps["mapRPG"]);
+          const iconDraggable = L.icon({
+            iconUrl: "assets/marker_draggable.png",
+            iconSize: [35, 40],
+            iconAnchor: [15, 38],
+          });
+          const draggingMarker = new L.marker([this.latitude, this.longitude], {
+            icon: iconDraggable,
+            draggable: true,
+            autoPan: true,
+          }).addTo(this.allMaps["map"]);
+
+          draggingMarker.addEventListener("drag", (e) => {
+            document.getElementById("latInfo").innerText =
+              e.latlng.lat.toFixed(5);
+            document.getElementById("lonInfo").innerText =
+              e.latlng.lng.toFixed(5);
+            document.getElementById("record_airtable_latitude").innerText =
+              e.latlng.lat.toFixed(5);
+            document.getElementById("record_airtable_latitude").value =
+              e.latlng.lat.toFixed(5).toString();
+            document.getElementById("record_airtable_longitude").innerText =
+              e.latlng.lng.toFixed(5);
+            document.getElementById("record_airtable_longitude").value =
+              e.latlng.lng.toFixed(5);
+          });
         });
       }
     );
@@ -148,13 +177,20 @@ export default class extends Controller {
       });
     }
 
-    document
-      .getElementById("directionBtn")
-      .addEventListener("click", (e) => {
-        e.preventDefault();
-        const arrival = document.getElementById("relaisNom").innerText;
-        this.requestDirection(arrival);
+    document.getElementById("directionBtn").addEventListener("click", (e) => {
+      e.preventDefault();
+      const arrival = document.getElementById("relaisNom").innerText;
+      this.requestDirection(arrival);
+    });
+    if (document.getElementById("map_zh")) {
+      window.addEventListener("scroll", (e) => {
+        if (e.timeStamp < 3000) {
+          // window.scrollTop = 0
+          // console.log(window.scrollTop)
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        }
       });
+    }
   }
 
   /**
@@ -201,7 +237,11 @@ export default class extends Controller {
     ).then((response) => {
       response.json().then((data) => {
         element.className = "font-bold";
-        element.innerText = data.features[0].properties.label;
+        try {
+          element.innerText = data.features[0].properties.label;
+        } catch (e) {
+          document.getElementById("erreur_adresse").classList.remove("d-none");
+        }
       });
     });
   }
@@ -234,16 +274,19 @@ export default class extends Controller {
           "</option>";
       }
       const icon = L.icon({
-        iconUrl: 'assets/marker.png',
-        iconSize: [28,40],
-        iconAnchor: [14, 32]
-      })
-      const marker = new L.Marker([
-        data.features[i].geometry.coordinates[1],
-        data.features[i].geometry.coordinates[0],
-      ], {
-        icon: icon
-      })
+        iconUrl: "assets/marker.png",
+        iconSize: [28, 40],
+        iconAnchor: [14, 32],
+      });
+      const marker = new L.Marker(
+        [
+          data.features[i].geometry.coordinates[1],
+          data.features[i].geometry.coordinates[0],
+        ],
+        {
+          icon: icon,
+        }
+      )
         .addTo(map)
         // Add a popup to the marker
         .bindPopup(data.features[i].properties.description);
@@ -277,7 +320,7 @@ export default class extends Controller {
   }
 
   async getRPG() {
-    try{
+    try {
       const responseGeom = await fetch(
         "https://apicarto.ign.fr/api/gpu/municipality?insee=" +
           (await this.getCodeInsee())
@@ -292,10 +335,9 @@ export default class extends Controller {
       const json = await response.json();
       const data = await json;
       return await data;
-    }catch(e){
-      console.error(e)
+    } catch (e) {
+      console.error(e);
     }
-    
   }
 
   async addPopupRpg(map) {
@@ -303,17 +345,8 @@ export default class extends Controller {
     L.geoJSON(data, {
       onEachFeature: function (feature, layer) {
         //Adding the card for onClick
-        const color = (feature) => {
-          let colour = "#";
-          for (let i = 0; i < codeCultu.length; i++) {
-            colour = colour.concat(
-              (alphabetPosition(codeCultu[i]) * 10 + 5).toString(16)
-            );
-          }
-          return colour;
-        };
-        layer.options.color = color;
-        layer.options.opacity = 0;
+        layer.options.color = "#ff7777";
+        layer.options.opacity = 0.5;
         layer.options.fillOpacity = 0.0;
         layer.addEventListener("click", () => {
           const marker = L.marker(layer.getBounds().getCenter(), {
@@ -408,7 +441,7 @@ export default class extends Controller {
         { cache: "force-cache" }
       );
       const data2 = await response2.json();
-      if(data2.features.totalFeatures == 0){
+      if (data2.features.totalFeatures == 0) {
         continue;
       }
       geoJsons.push(data2.features);
@@ -418,9 +451,9 @@ export default class extends Controller {
       count += 1;
     }
     const featuresArray = [];
-    for (let i = 0; i < await geoJsons.length; i++) {
-      if(!geoJsons[i][0]){
-        continue
+    for (let i = 0; i < (await geoJsons.length); i++) {
+      if (!geoJsons[i][0]) {
+        continue;
       }
       featuresArray.push(geoJsons[i][0]);
     }
@@ -510,7 +543,7 @@ export default class extends Controller {
     if (!arrival) {
       return;
     }
-    
+
     const arrivalLat = arrival.split(",")[0];
     const arrivalLon = arrival.split(",")[1];
     const response = await fetch(
@@ -518,17 +551,21 @@ export default class extends Controller {
       // `https://api.mapbox.com/directions/v5/mapbox/walking/${departureLongitude},${departureLatitude};${arrivalLon},${arrivalLat}?access_token=pk.eyJ1IjoiY2FlcnJvZmYiLCJhIjoiY20xZjRncHAyMTV3aTJqc2FzOHl1bTJsbyJ9.Fsh9vlPIq0LA4K4NQSMwjQ`
       // "https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?access_token=pk.eyJ1IjoiY2FlcnJvZmYiLCJhIjoiY20xZjRncHAyMTV3aTJqc2FzOHl1bTJsbyJ9.Fsh9vlPIq0LA4K4NQSMwjQ"
     );
-    const json = await response.json()
-    const paragraph = document.getElementById('responseDirection')
-    paragraph.innerText = `La distance entre les deux points (en passant par les routes/chemins) est de ${json.routes[0].distance / 1000}km et le temps de trajet est de ${this.convertSeconds(json.routes[0].duration)}`    
+    const json = await response.json();
+    const paragraph = document.getElementById("responseDirection");
+    paragraph.innerText = `La distance entre les deux points (en passant par les routes/chemins) est de ${(
+      json.routes[0].distance / 1000
+    ).toFixed(1)}km et le temps de trajet est de ${this.convertSeconds(
+      json.routes[0].duration
+    )}`;
   }
 
-  convertSeconds (seconds) {
-    console.log(seconds)
-    const hours = Math.floor(seconds / 3600)
-    const minutes = Math.floor((seconds % 3600) / 60)
-  
-    return `${hours} heure(s) : ${minutes} minute(s)`
+  convertSeconds(seconds) {
+    console.log(seconds);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+
+    return `${hours} heure(s) : ${minutes} minute(s)`;
   }
 
   setupFilters(map) {

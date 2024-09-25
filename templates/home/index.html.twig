@@ -55,13 +55,16 @@
 			<div class="col-6 text-center">
 				<p class="text-center">Adresse postale la plus proche :
 					<span id="adresse" class="italic">chargement en cours...</span>
+					<span id="erreur_adresse" class="d-none badge bg-danger">Erreur lors du chargement de l'adresse</span>
 				</p>
+				
 				<button id="kml" class="btn btn-primary">Télécharger le KML des parcelles</button>
 			</div>
 		</div>
 	</div>
 	{{form_start(form)}}
-
+	{{form_widget(form.latitude)}}
+	{{form_widget(form.longitude)}}
 	<div class="card my-2">
 		<div class="card-header">
 			<h3>Urbanisme</h3>
@@ -253,7 +256,7 @@
 			<div class="col-8 ">
 				{# <iframe id="map_patrimoine" style="height:40rem;" class="col-12 overscroll-contain" src="http://atlas.patrimoines.culture.fr/atlas/trunk/"></iframe> #}
 				<a href="http://atlas.patrimoines.culture.fr/atlas/trunk/" target="_blank" class="btn btn-primary m-2">Atlas Patrimoine</a>
-				<iframe style="height:60rem;" class="col-12 overscroll-contain" src="https://sig.reseau-zones-humides.org/"></iframe>
+				<iframe id="map_zh" style="height:60rem;" class="col-12 overscroll-contain" src="https://sig.reseau-zones-humides.org/"></iframe>
 			</div>
 			<div class="col-4">
 				<h2>MH</h2>

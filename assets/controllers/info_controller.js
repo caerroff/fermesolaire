@@ -35,8 +35,8 @@ export default class extends Controller {
           </thead>
           <tbody>
             <tr>
-              <td>${data.fields.Latitude}</td>
-              <td>${data.fields.Longitude}</td>
+              <td id='latInfo'>${data.fields.Latitude}</td>
+              <td id='lonInfo'>${data.fields.Longitude}</td>
               <td>${data.fields["TYP: Parcelles"]}</td>
             </tr>
           </table>
@@ -57,6 +57,9 @@ export default class extends Controller {
           const codeParcelle2 = parcelle.substring(0, 2);
           const codeParcelle4 = parcelle.substring(2, 6);
           const parcelleData = await this.getPointForParcelle(codeInsee, codeParcelle2, codeParcelle4);
+          if(parcelleData.features.length == 0){
+            return
+          }
           const coords = parcelleData.features[0].geometry.coordinates[0];
           total += area(coords[0]);
           const superficie = document.getElementById('superficie');
