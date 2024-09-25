@@ -408,16 +408,20 @@ export default class extends Controller {
         { cache: "force-cache" }
       );
       const data2 = await response2.json();
+      if(data2.features.totalFeatures == 0){
+        continue;
+      }
       geoJsons.push(data2.features);
-      console.log(geoJsons);
     }
     let count = 0;
     while (geoJsons.length < this.allParcelles.length && count < 100000) {
-      console.log("Waiting for all parcels to be fetched");
       count += 1;
     }
     const featuresArray = [];
-    for (let i = 0; i < geoJsons.length; i++) {
+    for (let i = 0; i < await geoJsons.length; i++) {
+      if(!geoJsons[i][0]){
+        continue
+      }
       featuresArray.push(geoJsons[i][0]);
     }
     const kml = toKML({ type: "FeatureCollection", features: featuresArray });
