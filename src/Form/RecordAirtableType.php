@@ -26,6 +26,10 @@ class RecordAirtableType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('recordId', TextType::class, [
+                "required" => true,
+                "attr" => ["class" => "d-none"]
+            ])
             ->add('TYPUrba')
             ->add('latitude', TextType::class, [
                 "required" => false,

@@ -47,6 +47,7 @@ class HomeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
             $record = $form->getData();
             $rpgs = $record->getRPG();
             $record->setRPG([]);
