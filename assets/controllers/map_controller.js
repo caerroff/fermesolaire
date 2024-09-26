@@ -479,11 +479,14 @@ export default class extends Controller {
     this.getPointForZoneUrba(await this.getCodeInsee()).then((data) => {
       try {
         const errorEl = document.getElementById("error-zone-urba");
+        const instructionEl = document.getElementById("instructions-zone-urba");
         if (data.features.length == 0) {
           errorEl.classList.remove("d-none");
+          instructionEl.classList.remove("d-none")
         } else {
           if (!errorEl.classList.contains("d-none")) {
             errorEl.classList.add("d-none");
+            instructionEl.classList.add("d-none")
           }
         }
         L.geoJSON(data, {

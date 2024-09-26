@@ -57,8 +57,18 @@
 					<span id="adresse" class="italic">chargement en cours...</span>
 					<span id="erreur_adresse" class="d-none badge bg-danger">Erreur lors du chargement de l'adresse</span>
 				</p>
-				
+
 				<button id="kml" class="btn btn-primary">Télécharger le KML des parcelles</button>
+				<div class="card m-2">
+					<div class="card-header">
+						<h3>
+							<i class="fa-regular fa-lightbulb bg-warning px-1 rounded"></i>
+							Instructions</h3>
+					</div>
+					<div class="card-body">
+						<p>Un marqueur bleu (<img src="/assets/marker_draggable.png" style="height:20px"/>) peut être deplacé afin d'afiner les coordonnées enregistrées dans Airtable</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -76,6 +86,17 @@
 				<h2>TYP Urba</h2>
 				{{form_widget(form.TYPUrba)}}
 				<span id="error-zone-urba" class="badge bg-danger d-none">Erreur lors du chargement de la zone urbaine (pas de zone urbaine)</span>
+			</div>
+
+			<div class="card m-2 d-none" id="instructions-zone-urba">
+				<div class="card-header">
+					<h3>
+						<i class="fa-regular fa-lightbulb bg-warning px-1 rounded"></i>
+						Instructions</h3>
+				</div>
+				<div class="card-body">
+					<p>Zone Urbaine indisponible ou RNU, veuillez vérifier sur Géoportail</p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -123,14 +144,35 @@
 				<h2>TYP VILLERACC</h2>
 				{{form_widget(form.TYPVilleRacc)}}
 				<h3>Pour utiliser l'API Google Maps :</h3>
-				<p>Cliquer sur le relais que l'on veut tester. Les coordonées devraient apparaitre ci-dessous, puis cliquer sur "Calculer la distance"</p>
-				<p>Distance avec le relais <span id="relaisNom"></span></p>
+				<div class="card m-2">
+					<div class="card-header">
+						<h3 class="text-center">
+							<i class="fa-regular fa-lightbulb bg-warning px-1 rounded"></i>
+							Instructions</h3>
+					</div>
+					<div class="card-body">
+						<p>Cliquer premièrement sur le relais choisi (marqueur rouge
+							<img src="assets/marker.png" style:"max-height:10px; width:6px;"/>) puis sur le bouton Calculer la distance.
+																				Il est possible que le relais le plus proche ne soit pas visible avec la vue par défaut, pensez à dé-zoomer.</p>
+					</div>
+				</div>
+				<p>Distance avec le relais
+					<span id="relaisNom"></span>
+				</p>
 				<button id="directionBtn" class="btn btn-primary">Calculer la distance</button>
 				<p id="responseDirection"></p>
 				<div class="h-50"></div>
-				<h2>Coordonees a rentrer dans Enedis (Cliquer sur le bouton pour copier):
-				</h2>
-				<button id="latlon" class="btn btn-xl btn-success"></button>
+				<div class="m-2 card">
+					<div class="card-header text-center">
+						<h3>
+							<i class="fa-regular fa-lightbulb bg-warning px-1 rounded"></i> 
+							Instructions</h3>
+					</div>
+					<div class="card-body">
+						<p>Coordonnées à entrer dans Enedis (Cliquer sur le bouton pour copier):</p>
+						<button id="latlon" class="btn btn-xl btn-success"></button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -251,19 +293,40 @@
 
 	<div class="card my-2">
 		<div class="card-header">
-			<h3>Autres</h3>
+			<h3>Milieux Historiques</h3>
 		</div>
 		<div class="card-body row">
-			<div class="col-8 ">
-				{# <iframe id="map_patrimoine" style="height:40rem;" class="col-12 overscroll-contain" src="http://atlas.patrimoines.culture.fr/atlas/trunk/"></iframe> #}
+			<div class="col-6">
 				<a href="http://atlas.patrimoines.culture.fr/atlas/trunk/" target="_blank" class="btn btn-primary m-2">Ouvrir l'Atlas des Patrimoines</a>
+			</div>
+			<div class="col-6">
+				<h2>MH</h2>
+				{{form_widget(form.MH)}}
+			</div>
+		</div>
+	</div>
+
+	<div class="card my-2">
+		<div class="card-header">
+			<h3>Zones Humides</h3>
+		</div>
+		<div class="card-body row">
+			<div class="col-8">
 				<iframe id="map_zh" style="height:60rem;" class="col-12 overscroll-contain" src="https://sig.reseau-zones-humides.org/"></iframe>
 			</div>
 			<div class="col-4">
-				<h2>MH</h2>
-				{{form_widget(form.MH)}}
 				<h2>Zone Humide</h2>
 				{{form_widget(form.ZoneHumide)}}
+			</div>
+		</div>
+	</div>
+
+	<div class="card my-2">
+		<div class="card-header">
+			<h3>Autres</h3>
+		</div>
+		<div class="card-body row">
+			<div class="col-12">
 				<h2>TYP: InfoComp</h2>
 				{{form_widget(form.TYPInfoComp)}}
 			</div>
