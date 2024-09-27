@@ -5,12 +5,11 @@ import Routing from "../app";
 import "../equivalents";
 import { foldersToKML, toKML } from "@placemarkio/tokml";
 import measure from "../measure";
-import { Client } from "@googlemaps/google-maps-services-js";
-import { directions } from "@googlemaps/google-maps-services-js/dist/directions";
-import axios from "axios";
 
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiY2FlcnJvZmYiLCJhIjoiY20xZjRncHAyMTV3aTJqc2FzOHl1bTJsbyJ9.Fsh9vlPIq0LA4K4NQSMwjQ";
+let mapboxgl = require('mapbox-gl/dist/mapbox-gl.js')
+let MapboxDirections = require('@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions')
 
 export default class extends Controller {
   map = null;
@@ -28,6 +27,7 @@ export default class extends Controller {
   codeParcelle4 = null;
 
   initialize() {
+    mapboxgl.accessToken = MAPBOX_TOKEN;
     this.maps = document.querySelectorAll(".map");
     for (let i = 0; i < this.maps.length; i++) {
       const map = this.maps[i];
@@ -114,6 +114,9 @@ export default class extends Controller {
               this.fetchParcelle(this.allMaps[map.id], true);
             }
             this.centerMap(this.allMaps[map.id]);
+            if(map.id == "mapReseau"){
+              continue
+            }
             this.fetchParcelle(this.allMaps[map.id]);
           }
           this.loadKmz(this.allMaps["mapReseau"]);
@@ -201,6 +204,17 @@ export default class extends Controller {
    * @returns {*} The finished map
    */
   mapFactory(map, tileLayer, opacity = 1, maxZoom = 19) {
+    if(map.id == 'mapReseau'){
+      const finishedMap = new mapboxgl.Map({
+        container: 'mapReseau',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [46, 3],
+        zoom: 12,
+        id: 'mapReseau',
+      })
+      finishedMap.addControl(new mapboxgl.NavigationControl());
+      return finishedMap
+    }
     const finishedMap = new L.Map(map, {
       center: [46, 3],
       zoom: 12,
@@ -273,29 +287,24 @@ export default class extends Controller {
           data.features[i].properties.name +
           "</option>";
       }
-      const icon = L.icon({
-        iconUrl: "assets/marker.png",
-        iconSize: [28, 40],
-        iconAnchor: [14, 32],
-      });
-      const marker = new L.Marker(
-        [
-          data.features[i].geometry.coordinates[1],
-          data.features[i].geometry.coordinates[0],
-        ],
-        {
-          icon: icon,
+      const el = document.createElement('div');
+      el.className = 'marker';
+      const popup = new mapboxgl.Popup({offset: 10}).setHTML(data.features[i].properties.description)
+      new mapboxgl.Marker(el)
+      // .setPopup(data.features[i].properties.description)
+      .setLngLat(data.features[i].geometry.coordinates)
+      .setPopup(popup)
+        .addTo(map);
+      map.on("click", function (event) {
+        if(event.originalEvent.target.className == "mapboxgl-canvas"){
+          return;
         }
-      )
-        .addTo(map)
-        // Add a popup to the marker
-        .bindPopup(data.features[i].properties.description);
-      marker.on("click", function (event) {
+        console.log(event.originalEvent.target.className)
         const relaisNom = document.getElementById("relaisNom");
         if (!relaisNom) {
           return;
         }
-        relaisNom.innerText = event.latlng.lat + "," + event.latlng.lng;
+        relaisNom.innerText = event.lngLat.lat + "," + event.lngLat.lng;
       });
     }
   }
@@ -306,7 +315,7 @@ export default class extends Controller {
 
   addMarker(map) {
     if (!map) return;
-    L.marker([this.latitude, this.longitude]).addTo(map);
+    new mapboxgl.Marker().setLngLat([this.longitude, this.latitude]).addTo(map);
   }
 
   getColorCodeCultu(codeCultu) {
@@ -555,6 +564,14 @@ export default class extends Controller {
       // "https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?access_token=pk.eyJ1IjoiY2FlcnJvZmYiLCJhIjoiY20xZjRncHAyMTV3aTJqc2FzOHl1bTJsbyJ9.Fsh9vlPIq0LA4K4NQSMwjQ"
     );
     const json = await response.json();
+    var directions = new MapboxDirections({
+      accessToken: MAPBOX_TOKEN,
+      unit: 'metric',
+      profile: 'mapbox/walking',
+    })
+    directions.setOrigin([departureLongitude, departureLatitude])
+    directions.setDestination([arrivalLon, arrivalLat])
+    this.allMaps["mapReseau"].addControl(directions, 'top-left')
     const paragraph = document.getElementById("responseDirection");
     paragraph.innerText = `La distance entre les deux points (en passant par les routes/chemins) est de ${(
       json.routes[0].distance / 1000
@@ -564,7 +581,6 @@ export default class extends Controller {
   }
 
   convertSeconds(seconds) {
-    console.log(seconds);
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
 

@@ -29,6 +29,7 @@
     "dependencies": {
         "@googlemaps/google-maps-services-js": "^3.4.0",
         "@hotwired/stimulus": "^3.2.2",
+        "@mapbox/mapbox-gl-directions": "^4.3.1",
         "@placemarkio/tokml": "^0.3.3",
         "@symfony/stimulus-bridge": "^3.2.2",
         "axios": "^1.7.7",
@@ -37,6 +38,7 @@
         "jQuery": "npm:jquery@^3.7.1",
         "leaflet": "^1.9.4",
         "leaflet.bigimage": "^1.0.1",
+        "mapbox-gl": "^3.6.0",
         "postcss": "^8.4.38"
     }
 }
