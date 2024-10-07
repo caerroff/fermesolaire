@@ -355,7 +355,7 @@ export default class extends Controller {
       onEachFeature: function (feature, layer) {
         //Adding the card for onClick
         layer.options.color = "#ff7777";
-        layer.options.opacity = 0.5;
+        layer.options.opacity = 0.0;
         layer.options.fillOpacity = 0.0;
         layer.addEventListener("click", () => {
           const marker = L.marker(layer.getBounds().getCenter(), {
@@ -487,14 +487,11 @@ export default class extends Controller {
   async fetchZoneUrba(map) {
     this.getPointForZoneUrba(await this.getCodeInsee()).then((data) => {
       try {
-        const errorEl = document.getElementById("error-zone-urba");
         const instructionEl = document.getElementById("instructions-zone-urba");
         if (data.features.length == 0) {
-          errorEl.classList.remove("d-none");
           instructionEl.classList.remove("d-none")
         } else {
-          if (!errorEl.classList.contains("d-none")) {
-            errorEl.classList.add("d-none");
+          if (!instructionEl.classList.contains("d-none")) {
             instructionEl.classList.add("d-none")
           }
         }
@@ -568,6 +565,7 @@ export default class extends Controller {
       accessToken: MAPBOX_TOKEN,
       unit: 'metric',
       profile: 'mapbox/walking',
+      controls: {instructions: false},
     })
     directions.setOrigin([departureLongitude, departureLatitude])
     directions.setDestination([arrivalLon, arrivalLat])
@@ -596,51 +594,43 @@ export default class extends Controller {
           switch (fond) {
             case "oiseaux":
               new L.TileLayer(
-                "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZPS&style=PROTECTEDAREAS.ZPS&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
+                "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.ZPS&style=PROTECTEDAREAS.ZPS&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
                 { opacity: 0.8 }
               ).addTo(map);
               break;
             case "habitats":
               new L.TileLayer(
-                "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.SIC&style=PROTECTEDAREAS.SIC&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
+                "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.SIC&style=PROTECTEDAREAS.SIC&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
                 { opacity: 0.8 }
               ).addTo(map);
               break;
             case "pnr":
               new L.TileLayer(
-                "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.PNR&style=PROTECTEDAREAS.PNR&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
+                "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.PNR&style=PROTECTEDAREAS.PNR&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
                 { opacity: 0.8 }
               ).addTo(map);
               break;
             case "biotope":
               new L.TileLayer(
-                "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.APB&style=PROTECTEDAREAS.APB&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
+                "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.APB&style=PROTECTEDAREAS.APB&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
                 { opacity: 0.8 }
               ).addTo(map);
               break;
             case "znieff1":
               new L.TileLayer(
-                "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF1.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
-                { opacity: 0.8 }
-              ).addTo(map);
-              new L.TileLayer(
-                "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF1&style=PROTECTEDAREAS.ZNIEFF1&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
+                "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.ZNIEFF1.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
                 { opacity: 0.8 }
               ).addTo(map);
               break;
             case "znieff2":
               L.tileLayer(
-                "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF2.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
+                "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.ZNIEFF2.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
                 { opacity: 1.0 }
-              ).addTo(map);
-              L.tileLayer(
-                "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF2&style=PROTECTEDAREAS.ZNIEFF2&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
-                { opacity: 0.7 }
               ).addTo(map);
               break;
             case "parcs":
               L.tileLayer(
-                "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.PN&style=PROTECTEDAREAS.PN&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
+                "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.PN&style=PROTECTEDAREAS.PN&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
                 { opacity: 0.7 }
               ).addTo(map);
               break;
@@ -654,7 +644,7 @@ export default class extends Controller {
               map.eachLayer((layer) => {
                 if (
                   layer._url ===
-                  "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZPS&style=PROTECTEDAREAS.ZPS&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
+                  "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.ZPS&style=PROTECTEDAREAS.ZPS&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
                 ) {
                   map.removeLayer(layer);
                 }
@@ -664,7 +654,7 @@ export default class extends Controller {
               map.eachLayer((layer) => {
                 if (
                   layer._url ===
-                  "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.SIC&style=PROTECTEDAREAS.SIC&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
+                  "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.SIC&style=PROTECTEDAREAS.SIC&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
                 ) {
                   map.removeLayer(layer);
                 }
@@ -674,7 +664,7 @@ export default class extends Controller {
               map.eachLayer((layer) => {
                 if (
                   layer._url ===
-                  "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.PNR&style=PROTECTEDAREAS.PNR&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
+                  "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.PNR&style=PROTECTEDAREAS.PNR&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
                 ) {
                   map.removeLayer(layer);
                 }
@@ -684,7 +674,7 @@ export default class extends Controller {
               map.eachLayer((layer) => {
                 if (
                   layer._url ===
-                  "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.APB&style=PROTECTEDAREAS.APB&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
+                  "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.APB&style=PROTECTEDAREAS.APB&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
                 ) {
                   map.removeLayer(layer);
                 }
@@ -694,15 +684,7 @@ export default class extends Controller {
               map.eachLayer((layer) => {
                 if (
                   layer._url ===
-                  "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF1.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
-                ) {
-                  map.removeLayer(layer);
-                }
-              });
-              map.eachLayer((layer) => {
-                if (
-                  layer._url ===
-                  "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF1&style=PROTECTEDAREAS.ZNIEFF1&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
+                  "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.ZNIEFF1.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
                 ) {
                   map.removeLayer(layer);
                 }
@@ -712,15 +694,7 @@ export default class extends Controller {
               map.eachLayer((layer) => {
                 if (
                   layer._url ===
-                  "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF2.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
-                ) {
-                  map.removeLayer(layer);
-                }
-              });
-              map.eachLayer((layer) => {
-                if (
-                  layer._url ===
-                  "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.ZNIEFF2&style=PROTECTEDAREAS.ZNIEFF2&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
+                  "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.ZNIEFF2.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
                 ) {
                   map.removeLayer(layer);
                 }
@@ -730,7 +704,7 @@ export default class extends Controller {
               map.eachLayer((layer) => {
                 if (
                   layer._url ===
-                  "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=PROTECTEDAREAS.PN&style=PROTECTEDAREAS.PN&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
+                  "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.PN&style=PROTECTEDAREAS.PN&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
                 ) {
                   map.removeLayer(layer);
                 }
