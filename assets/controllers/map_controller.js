@@ -53,7 +53,7 @@ export default class extends Controller {
     }
     const adresseParcelleEl = document.getElementById("adresse");
     new L.TileLayer(
-      "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8w/geoportail/wmts?layer=LANDUSE.AGRICULTURE2023&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
+      "https://data.geopf.fr/wmts?layer=LANDUSE.AGRICULTURE2023&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
       { opacity: 0.8 }
     ).addTo(this.allMaps["mapRPG"]);
 

@@ -105,22 +105,23 @@ export default class extends Controller {
   }
 
   async getRisques(codeInsee){
-    const response = await fetch("https://georisques.gouv.fr/api/v1/gaspar/risques?code_insee="+codeInsee)
-    const json = await response.json()
-    const risquesText = document.getElementById("risques_text")
-    if(json.results == 0){
-      risquesText.innerText = "Pas de risques trouvés"
-    }else{
-      risquesText.innerText = "Risques trouvés pour le code INSEE"
-      risquesText.classList.remove("bg-success")
-      risquesText.classList.add("bg-danger")
-      for(let i = 0; i < json.data.length; i++){
-        const el = new HTMLAnchorElement()
-        el.classList.add(['alert', 'alert-warning'])
-        el.attributes.append("href", json.data[i])
-        el.innerText = json.data[i]
-        risquesText.child
-      }
-    }
+    return
+    // const response = await fetch("https://georisques.gouv.fr/api/v1/gaspar/risques?code_insee="+codeInsee)
+    // const json = await response.json()
+    // const risquesText = document.getElementById("risques_text")
+    // if(json.results == 0){
+    //   risquesText.innerText = "Pas de risques trouvés"
+    // }else{
+    //   risquesText.innerText = "Risques trouvés pour le code INSEE"
+    //   risquesText.classList.remove("bg-success")
+    //   risquesText.classList.add("bg-danger")
+    //   for(let i = 0; i < json.data.length; i++){
+    //     const el = new HTMLAnchorElement()
+    //     el.classList.add(['alert', 'alert-warning'])
+    //     el.attributes.append("href", json.data[i])
+    //     el.innerText = json.data[i]
+    //     risquesText.child
+    //   }
+    // }
   }
 }
