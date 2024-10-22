@@ -40,7 +40,7 @@ export default class extends Controller {
             </tr>
           </table>
           
-          <h4 class="pt-1">Superficie Totale: <span id="superficie" class="mb-0">chargement...</span></h4>
+          <h4 class="pt-1">Superficie Totale: <span id="superficie" class="mb-0">0.00 m²</span></h4>
         `;
       })
     })
@@ -58,16 +58,16 @@ export default class extends Controller {
           const codeParcelle2 = parcelle.substring(0, 2);
           const codeParcelle4 = parcelle.substring(2, 6);
           const parcelleData = await this.getPointForParcelle(codeInsee, codeParcelle2, codeParcelle4);
-          if(parcelleData.features.length == 0){
+          if (parcelleData.features.length == 0) {
             return
           }
           const coords = parcelleData.features[0].geometry.coordinates[0];
           total += area(coords[0]);
-          
-          console.log(total);
-        });
-        const superficie = document.getElementById('superficie');
-        superficie.innerHTML = total.toFixed(2) + ' m²';
+          const superficie = document.getElementById('superficie');
+          superficie.innerHTML = total.toFixed(2) + ' m²';
+        })
+        
+
         this.getRisques(this.insee);
       })
     })
@@ -107,7 +107,7 @@ export default class extends Controller {
     return data
   }
 
-  async getRisques(codeInsee){
+  async getRisques(codeInsee) {
     return
     // const response = await fetch("https://georisques.gouv.fr/api/v1/gaspar/risques?code_insee="+codeInsee)
     // const json = await response.json()
