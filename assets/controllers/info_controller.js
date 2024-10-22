@@ -19,7 +19,6 @@ export default class extends Controller {
 
     // Get the info element from DOM
     const info = document.getElementById('info');
-    const solargis = document.getElementById('solargis');
 
     if (!info) return;
     fetch(Routing.generate('app_airtable', { record: this.id })).then((response) => {
@@ -48,9 +47,11 @@ export default class extends Controller {
 
     fetch(Routing.generate('app_airtable', { record: this.id })).then((response) => {
       response.json().then((data) => {
+        console.log("Hello world")
         const parcelles = data.fields["TYP: Parcelles"].replaceAll(' ', '').split(',');
         let total = 0;
         parcelles.forEach(async parcelle => {
+          console.log(parcelle)
           const codeInsee = await getCodeInsee(data.fields.Latitude, data.fields.Longitude);
           this.insee = codeInsee;
           this.getLoi();
@@ -62,9 +63,11 @@ export default class extends Controller {
           }
           const coords = parcelleData.features[0].geometry.coordinates[0];
           total += area(coords[0]);
-          const superficie = document.getElementById('superficie');
-          superficie.innerHTML = total.toFixed(2) + ' m²';
+          
+          console.log(total);
         });
+        const superficie = document.getElementById('superficie');
+        superficie.innerHTML = total.toFixed(2) + ' m²';
         this.getRisques(this.insee);
       })
     })

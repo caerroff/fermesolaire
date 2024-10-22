@@ -114,7 +114,7 @@ export default class extends Controller {
               this.fetchParcelle(this.allMaps[map.id], true);
             }
             this.centerMap(this.allMaps[map.id]);
-            if(map.id == "mapReseau"){
+            if (map.id == "mapReseau") {
               continue
             }
             this.fetchParcelle(this.allMaps[map.id]);
@@ -184,6 +184,7 @@ export default class extends Controller {
       e.preventDefault();
       const arrival = document.getElementById("relaisNom").innerText;
       this.requestDirection(arrival);
+      console.log('clicked')
     });
     if (document.getElementById("map_zh")) {
       window.addEventListener("scroll", (e) => {
@@ -204,7 +205,7 @@ export default class extends Controller {
    * @returns {*} The finished map
    */
   mapFactory(map, tileLayer, opacity = 1, maxZoom = 19) {
-    if(map.id == 'mapReseau'){
+    if (map.id == 'mapReseau') {
       const finishedMap = new mapboxgl.Map({
         container: 'mapReseau',
         style: 'mapbox://styles/mapbox/streets-v12',
@@ -245,9 +246,9 @@ export default class extends Controller {
   findAdresse(latitude, longitude, element) {
     fetch(
       "https://api-adresse.data.gouv.fr/reverse/?lon=" +
-        longitude +
-        "&lat=" +
-        latitude
+      longitude +
+      "&lat=" +
+      latitude
     ).then((response) => {
       response.json().then((data) => {
         element.className = "font-bold";
@@ -289,14 +290,14 @@ export default class extends Controller {
       }
       const el = document.createElement('div');
       el.className = 'marker';
-      const popup = new mapboxgl.Popup({offset: 10}).setHTML(data.features[i].properties.description)
+      const popup = new mapboxgl.Popup({ offset: 10 }).setHTML(data.features[i].properties.description)
       new mapboxgl.Marker(el)
-      // .setPopup(data.features[i].properties.description)
-      .setLngLat(data.features[i].geometry.coordinates)
-      .setPopup(popup)
+        // .setPopup(data.features[i].properties.description)
+        .setLngLat(data.features[i].geometry.coordinates)
+        .setPopup(popup)
         .addTo(map);
       map.on("click", function (event) {
-        if(event.originalEvent.target.className == "mapboxgl-canvas"){
+        if (event.originalEvent.target.className == "mapboxgl-canvas") {
           return;
         }
         console.log(event.originalEvent.target.className)
@@ -332,14 +333,14 @@ export default class extends Controller {
     try {
       const responseGeom = await fetch(
         "https://apicarto.ign.fr/api/gpu/municipality?insee=" +
-          (await this.getCodeInsee())
+        (await this.getCodeInsee())
       );
       const jsonGeom = await responseGeom.json();
       const dataGeom = await jsonGeom;
       const geom = await dataGeom.features[0].geometry;
       const response = await fetch(
         "https://apicarto.ign.fr/api/rpg/v2?annee=2021&geom=" +
-          (await JSON.stringify(geom))
+        (await JSON.stringify(geom))
       );
       const json = await response.json();
       const data = await json;
@@ -380,9 +381,9 @@ export default class extends Controller {
   async getCodeInsee() {
     const response = await fetch(
       "https://geo.api.gouv.fr/communes/?lat=" +
-        this.latitude +
-        "&lon=" +
-        this.longitude
+      this.latitude +
+      "&lon=" +
+      this.longitude
     );
     const data = await response.json();
     this.codeInsee = data[0].code;
@@ -392,20 +393,20 @@ export default class extends Controller {
   fetchParcelle(map, pin = false) {
     fetch(
       "https://geo.api.gouv.fr/communes/?lat=" +
-        this.latitude +
-        "&lon=" +
-        this.longitude
+      this.latitude +
+      "&lon=" +
+      this.longitude
     ).then((response) => {
       response.json().then((data) => {
         this.codeInsee = data[0].code;
         this.allParcelles.forEach((parcelle) => {
           fetch(
             "https://apicarto.ign.fr/api/cadastre/parcelle?code_insee=" +
-              this.codeInsee +
-              "&section=" +
-              parcelle.substring(0, 2) +
-              "&numero=" +
-              parcelle.substring(2, 6),
+            this.codeInsee +
+            "&section=" +
+            parcelle.substring(0, 2) +
+            "&numero=" +
+            parcelle.substring(2, 6),
             { cache: "force-cache" }
           ).then((response) => {
             response.json().then((data) => {
@@ -432,9 +433,9 @@ export default class extends Controller {
   async fetchKmlParcelle(map) {
     const response1 = await fetch(
       "https://geo.api.gouv.fr/communes/?lat=" +
-        this.latitude +
-        "&lon=" +
-        this.longitude
+      this.latitude +
+      "&lon=" +
+      this.longitude
     );
     const data1 = await response1.json();
     this.codeInsee = data1[0].code;
@@ -442,11 +443,11 @@ export default class extends Controller {
     for (let i = 0; i < this.allParcelles.length; i++) {
       const response2 = await fetch(
         "https://apicarto.ign.fr/api/cadastre/parcelle?code_insee=" +
-          (await this.codeInsee) +
-          "&section=" +
-          (await this.allParcelles[i].substring(0, 2)) +
-          "&numero=" +
-          (await this.allParcelles[i].substring(2, 6)),
+        (await this.codeInsee) +
+        "&section=" +
+        (await this.allParcelles[i].substring(0, 2)) +
+        "&numero=" +
+        (await this.allParcelles[i].substring(2, 6)),
         { cache: "force-cache" }
       );
       const data2 = await response2.json();
@@ -507,10 +508,10 @@ export default class extends Controller {
               marker
                 .bindPopup(
                   "<p>" +
-                    feature.properties.libelle +
-                    " - " +
-                    feature.properties.libelong +
-                    "</p>"
+                  feature.properties.libelle +
+                  " - " +
+                  feature.properties.libelong +
+                  "</p>"
                 )
                 .openPopup();
             });
@@ -541,7 +542,7 @@ export default class extends Controller {
   }
 
   /**
-   * Make a request to Google's Direction API to know shortest direction (walking) to point
+   * Make a request to Mapbox's Direction API to know shortest direction (walking) to point
    * @param {string} arrival
    */
   async requestDirection(
@@ -565,11 +566,15 @@ export default class extends Controller {
       accessToken: MAPBOX_TOKEN,
       unit: 'metric',
       profile: 'mapbox/walking',
-      controls: {instructions: false},
+      controls: { instructions: false },
     })
     directions.setOrigin([departureLongitude, departureLatitude])
     directions.setDestination([arrivalLon, arrivalLat])
-    this.allMaps["mapReseau"].addControl(directions, 'top-left')
+    try{
+      this.allMaps["mapReseau"].addControl(directions, 'top-left')
+    }catch(e){
+      ;
+    }
     const paragraph = document.getElementById("responseDirection");
     paragraph.innerText = `La distance entre les deux points (en passant par les routes/chemins) est de ${(
       json.routes[0].distance / 1000
