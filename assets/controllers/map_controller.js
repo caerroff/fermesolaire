@@ -624,12 +624,20 @@ export default class extends Controller {
             case "znieff1":
               new L.TileLayer(
                 "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.ZNIEFF1.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
-                { opacity: 0.8 }
+                { opacity: 1 }
+              ).addTo(map);
+              new L.TileLayer(
+                "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.ZNIEFF1&style=PROTECTEDAREAS.ZNIEFF1&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
+                { opacity: 1 }
               ).addTo(map);
               break;
             case "znieff2":
               L.tileLayer(
                 "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.ZNIEFF2.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
+                { opacity: 1.0 }
+              ).addTo(map);
+              L.tileLayer(
+                "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.ZNIEFF2&style=PROTECTEDAREAS.ZNIEFF2&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}",
                 { opacity: 1.0 }
               ).addTo(map);
               break;
@@ -689,6 +697,9 @@ export default class extends Controller {
               map.eachLayer((layer) => {
                 if (
                   layer._url ===
+                  "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.ZNIEFF1&style=PROTECTEDAREAS.ZNIEFF1&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
+                  ||
+                  layer._url ===
                   "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.ZNIEFF1.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
                 ) {
                   map.removeLayer(layer);
@@ -698,6 +709,9 @@ export default class extends Controller {
             case "znieff2":
               map.eachLayer((layer) => {
                 if (
+                  layer._url ===
+                  "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.ZNIEFF2&style=PROTECTEDAREAS.ZNIEFF2&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
+                  ||
                   layer._url ===
                   "https://data.geopf.fr/wmts?layer=PROTECTEDAREAS.ZNIEFF2.SEA&style=normal&tilematrixset=PM&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix={z}&TileCol={x}&TileRow={y}"
                 ) {
