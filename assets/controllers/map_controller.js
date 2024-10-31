@@ -482,6 +482,7 @@ export default class extends Controller {
     );
     const json = await response.json();
     const data = await json;
+    console.log(data)
     return data;
   }
 
