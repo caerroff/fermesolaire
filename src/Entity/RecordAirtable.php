@@ -200,7 +200,7 @@ class RecordAirtable
         if ($this->getRPG() != []) {
             $json['fields']['RPG 2023 intranet'] = $this->getRPG() ?? null;
         }
-        $json['fields']['TYP: DistRacc'] = $this->getTYPDisRacc() ?? null;
+        $json['fields']['TYP: DistRacc'] = (float) $this->getTYPDisRacc() ?? null;
         $json['fields']['Latitude'] = $this->getLatitude() ?? null;
         $json['fields']['Longitude'] = $this->getLongitude() ?? null;
         $json['fields']['TYP: CapaRacc'] = $this->getTYPCapRacc() ?? null;

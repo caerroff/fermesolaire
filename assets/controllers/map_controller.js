@@ -331,20 +331,25 @@ export default class extends Controller {
 
   async getRPG() {
     try {
-      const responseGeom = await fetch(
-        "https://apicarto.ign.fr/api/gpu/municipality?insee=" +
-        (await this.getCodeInsee())
-      );
-      const jsonGeom = await responseGeom.json();
-      const dataGeom = await jsonGeom;
-      const geom = await dataGeom.features[0].geometry;
-      const response = await fetch(
-        "https://apicarto.ign.fr/api/rpg/v2?annee=2021&geom=" +
-        (await JSON.stringify(geom))
-      );
-      const json = await response.json();
-      const data = await json;
-      return await data;
+      // const responseGeom = await fetch(
+      //   "https://apicarto.ign.fr/api/gpu/municipality?insee=" +
+      //   (await this.getCodeInsee())
+      // );
+      const retour = new Promise(async (resolve) => {
+        const responseGeom = await this.getParcellesGeom()
+        let geoms = []
+        for(let i = 0; i < responseGeom.length; i++){
+          const response = await fetch(
+            "https://apicarto.ign.fr/api/rpg/v2?annee=2021&geom=" +
+            (JSON.stringify(responseGeom[i].features[0].geometry))
+          );
+          const json = await response.json();
+          geoms.push(json.features)
+        }
+        resolve(geoms)
+        return geoms        
+      })
+      return retour;
     } catch (e) {
       console.error(e);
     }
@@ -352,7 +357,17 @@ export default class extends Controller {
 
   async addPopupRpg(map) {
     const data = await this.getRPG();
-    L.geoJSON(data, {
+    var geojson = {
+      "name":"TotalFeatures",
+      "type":"FeatureCollection",
+      "features": data.flat().map((element) => {
+        if(element.length == 0){
+          return
+        }
+        return element
+      })
+    }
+    L.geoJSON(geojson, {
       onEachFeature: function (feature, layer) {
         //Adding the card for onClick
         layer.options.color = "#ff7777";
@@ -430,6 +445,34 @@ export default class extends Controller {
     });
   }
 
+  async getParcellesGeom() {
+    const commune = await fetch(
+      "https://geo.api.gouv.fr/communes/?lat=" +
+      this.latitude +
+      "&lon=" +
+      this.longitude
+    )
+    const data = await commune.json()
+    let retour = new Promise(async (resolve) => {
+      let allGeoms = []
+      for(let i = 0; i < this.allParcelles.length; i++){
+        const response = await fetch(
+          "https://apicarto.ign.fr/api/cadastre/parcelle?code_insee=" +
+          this.codeInsee +
+          "&section=" +
+          this.allParcelles[i].substring(0, 2) +
+          "&numero=" +
+          this.allParcelles[i].substring(2, 6),
+          { cache: "force-cache" }
+        )
+        const json = await response.json()
+        allGeoms.push(json)
+      }
+      resolve(allGeoms)
+    })
+    return await retour
+  }
+
   async fetchKmlParcelle(map) {
     const response1 = await fetch(
       "https://geo.api.gouv.fr/communes/?lat=" +
@@ -482,7 +525,6 @@ export default class extends Controller {
     );
     const json = await response.json();
     const data = await json;
-    console.log(data)
     return data;
   }
 
@@ -571,9 +613,9 @@ export default class extends Controller {
     })
     directions.setOrigin([departureLongitude, departureLatitude])
     directions.setDestination([arrivalLon, arrivalLat])
-    try{
+    try {
       this.allMaps["mapReseau"].addControl(directions, 'top-left')
-    }catch(e){
+    } catch (e) {
       ;
     }
     const paragraph = document.getElementById("responseDirection");

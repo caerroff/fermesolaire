@@ -47,11 +47,9 @@ export default class extends Controller {
 
     fetch(Routing.generate('app_airtable', { record: this.id })).then((response) => {
       response.json().then((data) => {
-        console.log("Hello world")
         const parcelles = data.fields["TYP: Parcelles"].replaceAll(' ', '').split(',');
         let total = 0;
         parcelles.forEach(async parcelle => {
-          console.log(parcelle)
           const codeInsee = await getCodeInsee(data.fields.Latitude, data.fields.Longitude);
           this.insee = codeInsee;
           this.getLoi();
@@ -77,7 +75,6 @@ export default class extends Controller {
     const response = await fetch(Routing.generate('loi_api_littoral', { code_insee: this.insee }));
     const json = await response.json();
     const element2 = document.createElement('div');
-    console.log(json)
     element2.innerHTML = json.classement ?? json;
     if (json != 'Non présent') {
       element2.setAttribute('class', 'alert alert-danger');
