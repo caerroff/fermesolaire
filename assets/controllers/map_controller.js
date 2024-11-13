@@ -107,7 +107,6 @@ export default class extends Controller {
             .replaceAll(" ", "")
             .split(",");
           this.addMarker(this.allMaps["mapReseau"]);
-          this.fetchZoneUrba(this.allMaps["mapUrba"]);
           for (let i = 0; i < this.maps.length; i++) {
             const map = this.maps[i];
             if (map.id == "map") {
@@ -121,6 +120,7 @@ export default class extends Controller {
           }
           this.loadKmz(this.allMaps["mapReseau"]);
           this.addPopupRpg(this.allMaps["mapRPG"]);
+          this.fetchZoneUrba(this.allMaps["mapUrba"]);
           const iconDraggable = L.icon({
             iconUrl: "assets/marker_draggable.png",
             iconSize: [35, 40],
@@ -544,6 +544,7 @@ export default class extends Controller {
             //Adding the card for onClick
             //layer.options.fillColor = '#883333'
             //layer.options.color = '#CC3333'
+            layer.bringToFront()
             layer.addEventListener("click", () => {
               const marker = L.marker(layer.getBounds().getCenter(), {
                 opacity: 0,
