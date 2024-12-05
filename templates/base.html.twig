@@ -22,20 +22,20 @@
 		{% endblock %}
 	</head>
 	<body>
-		<nav class="d-flex py-2" style="background-color: #ccccff">
+		<nav class="d-flex py-2" style="background-color: #b8d1ff">
 			<img src="{{ asset('assets/logofermesolaire.svg') }}" alt="Logo Ferme Solaire" class="absolute w-1/12 ml-2 px-2 ">
 			{% if app.user is not null %}
 			<ul class="d-flex justify-content-center align-self-center mb-0">
-				<a href="{{ path('app_home') }}"><li class="btn btn-primary mx-1 align-self-center">
+				<a href="{{ path('app_home') }}"><li class="btn btn-sm btn-primary mx-1 align-self-center">
 					<i class="fa fa-home"></i> Accueil 
 				</li></a>
-				<a href="{{ path('admin') }}"><li class="btn btn-primary mx-1 align-self-center">
+				<a href="{{ path('admin') }}"><li class="btn btn-sm btn-primary mx-1 align-self-center">
 					<i class="fa fa-user-gear"></i> Admin
 				</li></a>
-				<a href="{{ path('loi_montagne')}}"><li class="btn btn-primary mx-1 align-self-center">
+				<a href="{{ path('loi_montagne')}}"><li class="btn btn-sm btn-primary mx-1 align-self-center">
 					<i class="fa fa-mountain"></i> Fichier Loi Montagne
 				</li></a>
-				<a href="{{ path('loi_littoral')}}"><li class="btn btn-primary mx-1 align-self-center">
+				<a href="{{ path('loi_littoral')}}"><li class="btn btn-sm btn-primary mx-1 align-self-center">
 					<i class="fa fa-water"></i> Fichier Loi Littoral
 				</li></a>
 			</ul>
