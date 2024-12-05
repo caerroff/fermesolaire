@@ -11,11 +11,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/loi', name: 'loi_')]
 class LoiController extends AbstractController
 {
     #[Route('/littoral', name: 'littoral')]
+    #[IsGranted("ROLE_USER")]
     public function littoral(Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createFormBuilder()
@@ -67,6 +69,7 @@ class LoiController extends AbstractController
     }
 
     #[Route('/montagne', name: 'montagne')]
+    #[IsGranted("ROLE_USER")]
     public function montagne(Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createFormBuilder()

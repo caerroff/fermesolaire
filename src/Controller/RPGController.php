@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\RPG;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class RPGController extends AbstractController
 {
@@ -27,6 +28,7 @@ class RPGController extends AbstractController
     }
 
     #[Route('initRPG', name: 'app_init_rpg')]
+    #[IsGranted("ROLE_USER")]
     public function initRPG(Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createFormBuilder()

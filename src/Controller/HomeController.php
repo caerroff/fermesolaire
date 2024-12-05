@@ -7,6 +7,7 @@ use App\Entity\RPG;
 use App\Form\RecordAirtableType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(Request $request, EntityManagerInterface $em): Response
+    public function index(Request $request, EntityManagerInterface $em, Security $security): Response
     {
         $recherche = 'recEDwrksUR2I1bn2';
         // get content for https://www.georisques.gouv.fr/cartes-interactives#/
@@ -31,7 +32,7 @@ class HomeController extends AbstractController
         }
         $reponseApi = AirtableController::getRecord($recherche);
         if ($reponseApi instanceof \Error) {
-            $form = $this->createForm(RecordAirtableType::class);
+            $form = $this->createForm(RecordAirtableType::class, null, ["user" => $security->getUser()]);
             return $this->render('home/index.html.twig', [
                 'recherche' => $recherche,
                 'rechercheForm' => $rechercheForm->createView(),
@@ -43,7 +44,7 @@ class HomeController extends AbstractController
         $longitude = $reponseApi['fields']['Longitude'];
         $record = new RecordAirtable();
         $record->setRecord($reponseApi);
-        $form = $this->createForm(RecordAirtableType::class, $record);
+        $form = $this->createForm(RecordAirtableType::class, $record, ["user" => $security->getUser()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
