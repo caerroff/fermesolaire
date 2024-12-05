@@ -1,60 +1,97 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>Ferme Solaire -
-			{% block title %}{% endblock %}
-		</title>
-		<link rel="icon" href="{{asset('assets/icon.ico')}}">
-		<link
-		rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-		{#        add leaflet.BigImage css#}
-		<link rel="stylesheet" href="https://unpkg.com/leaflet.bigimage/dist/Leaflet.BigImage.min.css">
-		<link rel="stylesheet" type="text/css" href="https://ptma.github.io/Leaflet.Measure/src/leaflet.measure.css" />
-		<link href='https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css' rel='stylesheet' />
-		<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.3.1/mapbox-gl-directions.css" type="text/css">
-		{% block stylesheets %}
-			{{ encore_entry_link_tags('app') }}
-		{% endblock %}
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ferme Solaire - {% block title %}{% endblock %}</title>
+    <link rel="icon" href="{{ asset('assets/icon.ico') }}" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    {# add leaflet.BigImage css#}
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.bigimage/dist/Leaflet.BigImage.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://ptma.github.io/Leaflet.Measure/src/leaflet.measure.css"
+    />
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.3.1/mapbox-gl-directions.css"
+      type="text/css"
+    />
+    {% block stylesheets %}
+    {{
+      encore_entry_link_tags("app")
+    }}
+    {% endblock %} {% block javascripts %}
+    {{
+      encore_entry_script_tags("app")
+    }}
+    {% endblock %}
+  </head>
+  <body>
+    <nav class="d-flex py-2" style="background-color: #b8d1ff">
+      <img
+        src="{{ asset('assets/logofermesolaire.svg') }}"
+        alt="Logo Ferme Solaire"
+        class="absolute w-1/12 ml-2 px-2"
+      />
+      {% if app.user is not null %}
+      <ul class="d-flex justify-content-center align-self-center mb-0">
+        <a href="{{ path('app_home') }}">
+          <li class="btn btn-sm btn-primary mx-1 align-self-center">
+            <i class="fa fa-home"></i>
+            Accueil
+          </li>
+        </a>
+        {% if is_granted('ROLE_ADMIN')%}
+        <a href="{{ path('admin') }}">
+          <li class="btn btn-sm btn-primary mx-1 align-self-center">
+            <i class="fa fa-user-gear"></i>
+            Admin
+          </li>
+        </a>
+        {%endif%} {% if is_granted('ROLE_USER')%}
+        <a href="{{ path('loi_montagne') }}">
+          <li class="btn btn-sm btn-primary mx-1 align-self-center">
+            <i class="fa fa-mountain"></i>
+            Fichier Loi Montagne
+          </li>
+        </a>
+        {%endif%} {% if is_granted('ROLE_USER')%}
+        <a href="{{ path('loi_littoral') }}">
+          <li class="btn btn-sm btn-primary mx-1 align-self-center">
+            <i class="fa fa-water"></i>
+            Fichier Loi Littoral
+          </li>
+        </a>
+        {%endif%}
+      </ul>
+      {% endif %}
+    </nav>
+    <div class="card m-2">
+      {% for flash in app.flashes('success') %}
+      <div class="alert alert-success">{{ flash }}</div>
+      {% endfor %} {% for flash in app.flashes('error') %}
+      <div class="alert alert-danger">{{ flash }}</div>
+      {% endfor %}
 
-		{% block javascripts %}
-			{{ encore_entry_script_tags('app') }}
-		{% endblock %}
-	</head>
-	<body>
-		<nav class="d-flex py-2" style="background-color: #b8d1ff">
-			<img src="{{ asset('assets/logofermesolaire.svg') }}" alt="Logo Ferme Solaire" class="absolute w-1/12 ml-2 px-2 ">
-			{% if app.user is not null %}
-			<ul class="d-flex justify-content-center align-self-center mb-0">
-				<a href="{{ path('app_home') }}"><li class="btn btn-sm btn-primary mx-1 align-self-center">
-					<i class="fa fa-home"></i> Accueil 
-				</li></a>
-				<a href="{{ path('admin') }}"><li class="btn btn-sm btn-primary mx-1 align-self-center">
-					<i class="fa fa-user-gear"></i> Admin
-				</li></a>
-				<a href="{{ path('loi_montagne')}}"><li class="btn btn-sm btn-primary mx-1 align-self-center">
-					<i class="fa fa-mountain"></i> Fichier Loi Montagne
-				</li></a>
-				<a href="{{ path('loi_littoral')}}"><li class="btn btn-sm btn-primary mx-1 align-self-center">
-					<i class="fa fa-water"></i> Fichier Loi Littoral
-				</li></a>
-			</ul>
-			{% endif %}
-		</nav>
-		<div class="card m-2">
-			{% for flash in app.flashes('success') %}
-				<div class="alert alert-success">{{ flash }}</div>
-			{% endfor %}
-			{% for flash in app.flashes('error') %}
-				<div class="alert alert-danger">{{ flash }}</div>
-			{% endfor %}
+      <div class="card-header">
+        <h3>{% block heading 'Cartographies'%}</h3>
+      </div>
 
-			<div class="card-header">
-				<h3>{% block heading 'Cartographies'%}
-				</h3>
-			</body>
-		</html>
-	</body>
-</html></div><div class="card-body"> {% block body %}{% endblock %}
-</div>
-{% block footer %}{%endblock%}</div></body></html>
+      <div class="card-body">{% block body %}{% endblock %}</div>
+      {% block footer %}{%endblock%}
+    </div>
+  </body>
+</html>

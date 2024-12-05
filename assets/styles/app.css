@@ -1,12 +1,19 @@
 body {
-    background-color: lightgray;
+  background-color: lightgray;
 }
 
 .marker {
-    background-image: url('../../public/assets/marker.png');
-    background-size: cover;
-    width: 28px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-  }
+  background-image: url("../../public/assets/marker.png");
+  background-size: cover;
+  width: 28px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+a.disabled {
+  pointer-events: none !important;
+  cursor:default;
+  color: black;
+  display: none;
+}
