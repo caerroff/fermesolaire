@@ -17,7 +17,7 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
-        $recherche = 'receI98tyqDwdJVyf';
+        $recherche = 'recEDwrksUR2I1bn2';
         // get content for https://www.georisques.gouv.fr/cartes-interactives#/
         $rechercheForm = $this->createFormBuilder()
             ->add('recherche', null, ['data' => $recherche])
