@@ -6,8 +6,6 @@ import "../equivalents";
 import { foldersToKML, toKML } from "@placemarkio/tokml";
 import measure from "../measure";
 
-const MAPBOX_TOKEN =
-  "pk.eyJ1IjoiY2FlcnJvZmYiLCJhIjoiY20xZjRncHAyMTV3aTJqc2FzOHl1bTJsbyJ9.Fsh9vlPIq0LA4K4NQSMwjQ";
 let mapboxgl = require('mapbox-gl/dist/mapbox-gl.js')
 let MapboxDirections = require('@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions')
 
@@ -26,8 +24,9 @@ export default class extends Controller {
   codeParcelle2 = null;
   codeParcelle4 = null;
 
-  initialize() {
-    mapboxgl.accessToken = MAPBOX_TOKEN;
+  async initialize() {
+    const mapbox_response = await fetch(Routing.generate("api_mapbox_token"));
+    mapboxgl.accessToken = await mapbox_response.json();
     this.maps = document.querySelectorAll(".map");
     for (let i = 0; i < this.maps.length; i++) {
       const map = this.maps[i];
@@ -600,10 +599,10 @@ export default class extends Controller {
 
     const arrivalLat = arrival.split(",")[0];
     const arrivalLon = arrival.split(",")[1];
+    const mapboxResponse = await fetch(Routing.generate("api_mapbox_token"));
+    const MAPBOX_TOKEN = await mapboxResponse.json();
     const response = await fetch(
       `https://api.mapbox.com/directions/v5/mapbox/walking/${departureLongitude},${departureLatitude};${arrivalLon},${arrivalLat}?access_token=${MAPBOX_TOKEN}`
-      // `https://api.mapbox.com/directions/v5/mapbox/walking/${departureLongitude},${departureLatitude};${arrivalLon},${arrivalLat}?access_token=pk.eyJ1IjoiY2FlcnJvZmYiLCJhIjoiY20xZjRncHAyMTV3aTJqc2FzOHl1bTJsbyJ9.Fsh9vlPIq0LA4K4NQSMwjQ`
-      // "https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?access_token=pk.eyJ1IjoiY2FlcnJvZmYiLCJhIjoiY20xZjRncHAyMTV3aTJqc2FzOHl1bTJsbyJ9.Fsh9vlPIq0LA4K4NQSMwjQ"
     );
     const json = await response.json();
     var directions = new MapboxDirections({
