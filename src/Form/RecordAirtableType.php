@@ -13,15 +13,19 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\RPG;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class RecordAirtableType extends AbstractType
 {
     private $entitymanager;
 
-    public function __construct(EntityManagerInterface $entitymanager)
+    private $security;
+
+    public function __construct(EntityManagerInterface $entitymanager, Security $security)
     {
         $this->entitymanager = $entitymanager;
+        $this->security = $security;
     }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -127,12 +131,16 @@ class RecordAirtableType extends AbstractType
                 'attr' => [
                     'style' => 'height: 15.5rem;',
                 ]
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Enregistrer',
-                'attr' => ['class' => 'btn btn-lg btn-success text-center'],
-                'form_attr' => true
-            ]);
+                ]);
+            if($this->security->isGranted("ROLE_USER"))
+            {
+                $builder->add('submit', SubmitType::class, [
+                    'label' => 'Enregistrer',
+                    'attr' => ['class' => 'btn btn-lg btn-success text-center'],
+                    'form_attr' => true
+                ]);
+            }
+            
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -141,6 +149,7 @@ class RecordAirtableType extends AbstractType
             'data_class' => RecordAirtable::class,
             'validation_groups' => false,
             'allow_extra_fields' => true,
+            'user' => null,
         ]);
     }
 }

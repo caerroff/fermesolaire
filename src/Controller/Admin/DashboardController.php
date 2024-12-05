@@ -14,10 +14,12 @@ use App\Entity\User;
 use App\Entity\RPG;
 use App\Entity\Relais;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class DashboardController extends AbstractDashboardController
 {
     #[Route('/admin', name: 'admin')]
+    #[IsGranted("ROLE_USER")]
     public function index(): Response
     {
 
